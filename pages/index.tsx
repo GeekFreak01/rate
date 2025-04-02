@@ -29,12 +29,9 @@ export default function Home() {
 
   useEffect(() => {
     const today = new Date();
-    setDate(
-      today.toLocaleDateString("ru-RU", {
-        day: "numeric",
-        month: "long",
-      })
-    );
+    const day = String(today.getDate()).padStart(2, "0");
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    setDate(`${day}.${month}`);
     fetch("/api/crypto")
       .then((res) => res.json())
       .then((data) => setRates(data))
@@ -99,9 +96,8 @@ export default function Home() {
             {!rates ? (
               <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
             ) : (
-              <div className="flex flex-col justify-between h-full p-6 pt-16 relative">
-                {/* Дата с отступом от верхнего края */}
-                <div className="absolute top-10 left-6 text-white text-xl font-black">
+              <div className="flex flex-col justify-between h-full p-6 pt-20 relative">
+                <div className="absolute top-10 left-6 mb-4 text-white text-4xl font-black">
                   {date}
                 </div>
 
