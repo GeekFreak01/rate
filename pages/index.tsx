@@ -97,7 +97,7 @@ export default function Home() {
             {/* Сам canvas */}
             <div
               ref={ref}
-              className="rounded-3xl shadow-2xl border border-[#00d2ff]/10 bg-[#0a0f1c] w-full h-full"
+              className="rounded-3xl border border-[#00d2ff]/10 bg-[#0a0f1c] w-full h-full"
             >
               {!rates ? (
                 <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
