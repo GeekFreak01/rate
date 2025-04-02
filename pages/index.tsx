@@ -53,8 +53,8 @@ export default function Home() {
     const Arrow = isPositive ? ArrowUp : ArrowDown;
     const color = isPositive ? "text-green-400" : "text-red-400";
     return (
-      <span className={`flex items-center gap-1 text-lg ${color}`}>
-        <Arrow size={18} />
+      <span className={`flex items-center gap-1 text-xl ${color}`}>
+        <Arrow size={20} />
         {Math.abs(value).toFixed(2)}%
       </span>
     );
@@ -65,10 +65,14 @@ export default function Home() {
     return value > 100 ? Math.round(value).toString() : value.toFixed(2);
   };
 
-  const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
+  const IconWithLabel = ({ symbol }: { symbol: string }) => (
     <div className="flex items-center gap-4">
-      <img src={src} alt={alt} className="w-16 h-16" />
-      <span className="uppercase font-black text-4xl text-white">{alt}</span>
+      <img
+        src={`https://rate-jade.vercel.app/icons/${symbol.toLowerCase()}.svg`}
+        alt={symbol}
+        className="w-20 h-20"
+      />
+      <span className="uppercase font-black text-4xl text-white">{symbol}</span>
     </div>
   );
 
@@ -89,15 +93,15 @@ export default function Home() {
       <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-4 font-inter">
         <div className="space-y-4">
           <div
-            className="relative rounded-3xl shadow-2xl border border-[#00d2ff]/10 bg-gradient-to-b from-[#081520] to-[#0a0f1c]"
+            className="relative rounded-3xl shadow-2xl border border-[#00d2ff]/10 bg-[#0a0f1c]"
             ref={ref}
             style={{ width: 1080, height: 1080 }}
           >
             {!rates ? (
               <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
             ) : (
-              <div className="flex flex-col justify-between h-full p-6 pt-20 relative">
-                <div className="absolute top-10 left-6 mb-4 text-white text-4xl font-black">
+              <div className="flex flex-col justify-between h-full p-6 pt-24 relative gap-4">
+                <div className="absolute top-10 left-6 text-white text-4xl font-black">
                   {date}
                 </div>
 
@@ -113,7 +117,7 @@ export default function Home() {
                     style={{ height: 190 }}
                     className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-6 py-4 rounded-xl"
                   >
-                    <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
+                    <IconWithLabel symbol={symbol} />
                     <div className="flex flex-col items-end text-white leading-tight gap-2">
                       <span className="text-4xl font-black">
                         ${formatValue(symbol, value)}
