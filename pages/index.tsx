@@ -65,8 +65,8 @@ export default function Home() {
   };
 
   const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
-    <div className="flex items-center gap-2">
-      <img src={src} alt={alt} className="w-[32px] h-[32px]" />
+    <div className="flex items-center gap-1.5">
+      <img src={src} alt={alt} className="w-5 h-5" />
       <span className="uppercase font-black text-sm text-white">{alt}</span>
     </div>
   );
@@ -89,13 +89,13 @@ export default function Home() {
           <div
             className="relative rounded-3xl shadow-2xl border border-[#00d2ff]/10 bg-gradient-to-b from-[#081520] to-[#0a0f1c]"
             ref={ref}
-            style={{ width: 1080, height: 640 }}
+            style={{ width: 1080, height: 1080 }}
           >
             {!rates ? (
-              <div className="text-white text-xl text-center mt-20">Загрузка данных...</div>
+              <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
             ) : (
-              <div className="flex flex-col justify-end h-full p-6 pt-6 space-y-1.5">
-                <div className="absolute left-6 top-4 text-white text-xl font-black">
+              <div className="flex flex-col justify-center h-full px-6 pt-12 pb-8 gap-2 relative">
+                <div className="absolute top-6 left-6 text-white text-base font-black">
                   {date}
                 </div>
                 {[
@@ -107,13 +107,11 @@ export default function Home() {
                 ].map(({ symbol, value, change }) => (
                   <Card
                     key={symbol}
-                    className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-4 py-2 rounded-xl"
+                    className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-4 py-3 rounded-xl"
                   >
-                    <div className="flex items-center gap-4">
-                      <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
-                    </div>
-                    <div className="flex flex-col items-end text-white leading-tight gap-0.5">
-                      <span className="text-xl font-bold">
+                    <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
+                    <div className="flex flex-col items-end text-white leading-tight">
+                      <span className="text-base font-bold">
                         ${value.toFixed(symbol === "NOT" ? 4 : 2)}
                       </span>
                       <ChangeIndicator value={change} />
