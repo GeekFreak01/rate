@@ -57,17 +57,17 @@ export default function Home() {
     const Arrow = isPositive ? ArrowUp : ArrowDown;
     const color = isPositive ? "text-green-400" : "text-red-400";
     return (
-      <span className={`flex items-center gap-1 text-xs ${color}`}>
-        <Arrow size={12} />
+      <span className={`flex items-center gap-1 text-base ${color}`}>
+        <Arrow size={16} />
         {Math.abs(value).toFixed(2)}%
       </span>
     );
   };
 
   const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
-    <div className="flex items-center gap-1.5">
-      <img src={src} alt={alt} className="w-5 h-5" />
-      <span className="uppercase font-black text-sm text-white">{alt}</span>
+    <div className="flex items-center gap-2">
+      <img src={src} alt={alt} className="w-7 h-7" />
+      <span className="uppercase font-black text-xl text-white">{alt}</span>
     </div>
   );
 
@@ -94,10 +94,11 @@ export default function Home() {
             {!rates ? (
               <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
             ) : (
-              <div className="flex flex-col justify-center h-full px-6 pt-12 pb-8 gap-2 relative">
-                <div className="absolute top-6 left-6 text-white text-base font-black">
+              <div className="flex flex-col justify-between h-full p-6 pt-12 relative">
+                <div className="absolute top-6 left-6 text-white text-xl font-black">
                   {date}
                 </div>
+
                 {[
                   { symbol: "BTC", value: rates.btc, change: rates.changes.btc },
                   { symbol: "ETH", value: rates.eth, change: rates.changes.eth },
@@ -107,11 +108,12 @@ export default function Home() {
                 ].map(({ symbol, value, change }) => (
                   <Card
                     key={symbol}
-                    className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-4 py-3 rounded-xl"
+                    style={{ height: 200 }}
+                    className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-6 py-4 rounded-xl"
                   >
                     <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
-                    <div className="flex flex-col items-end text-white leading-tight">
-                      <span className="text-base font-bold">
+                    <div className="flex flex-col items-end text-white leading-tight gap-1">
+                      <span className="text-2xl font-black">
                         ${value.toFixed(symbol === "NOT" ? 4 : 2)}
                       </span>
                       <ChangeIndicator value={change} />
