@@ -66,8 +66,8 @@ export default function Home() {
 
   const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
     <div className="flex items-center gap-2">
-      <img src={src} alt={alt} className="w-6 h-6 rounded-full shadow-sm" />
-      <span className="uppercase font-black text-xl">{alt}</span>
+      <img src={src} alt={alt} className="w-5 h-5 rounded-full shadow-sm" />
+      <span className="uppercase font-black text-lg">{alt}</span>
     </div>
   );
 
@@ -113,13 +113,13 @@ export default function Home() {
                       <ChangeIndicator value={rates.changes.ton} />
                     </Card>
                     <Card className="bg-gradient-to-r from-[#0D3C6B] to-[#0A789C] text-white p-6 text-2xl font-black rounded-2xl shadow-xl">
-                      <div className="text-lg text-blue-200">КУРС ВАЛЮТ</div>
+                      <div className="text-lg text-blue-200">КУРСЫ ДРУГИХ</div>
                       <div className="flex justify-between mt-2">
-                        <span>$ {rates.usd.toFixed(2)}</span>
+                        <span>PX {rates.usd.toFixed(2)}</span>
                         <ChangeIndicator value={rates.changes.usd} />
                       </div>
                       <div className="flex justify-between">
-                        <span>€ {rates.eur.toFixed(2)}</span>
+                        <span>GRAM {rates.eur.toFixed(2)}</span>
                         <ChangeIndicator value={rates.changes.eur} />
                       </div>
                     </Card>
