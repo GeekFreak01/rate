@@ -95,7 +95,7 @@ export default function Home() {
               <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
             ) : (
               <div className="flex flex-col justify-between h-full p-6">
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {[
                     { symbol: "BTC", value: rates.btc, change: rates.changes.btc },
                     { symbol: "ETH", value: rates.eth, change: rates.changes.eth },
@@ -105,13 +105,11 @@ export default function Home() {
                   ].map(({ symbol, value, change }) => (
                     <Card
                       key={symbol}
-                      className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-4 py-2 rounded-xl"
+                      className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-3 py-1.5 rounded-xl"
                     >
                       <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
-                      <div className="flex flex-col items-end text-white">
-                        <span className="text-base font-bold">
-                          ${value.toFixed(symbol === "NOT" ? 4 : 2)}
-                        </span>
+                      <div className="flex flex-col items-end text-white leading-tight gap-0.5">
+                        <span className="text-base font-bold">${value.toFixed(symbol === "NOT" ? 4 : 2)}</span>
                         <ChangeIndicator value={change} />
                       </div>
                     </Card>
