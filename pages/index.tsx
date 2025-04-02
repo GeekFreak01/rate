@@ -56,17 +56,17 @@ export default function Home() {
     const Arrow = isPositive ? ArrowUp : ArrowDown;
     const color = isPositive ? "text-green-400" : "text-red-400";
     return (
-      <span className={`flex items-center gap-1 text-base ${color}`}>
-        <Arrow size={16} />
+      <span className={`flex items-center gap-1 text-lg ${color}`}>
+        <Arrow size={18} />
         {Math.abs(value).toFixed(2)}%
       </span>
     );
   };
 
   const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
-    <div className="flex items-center gap-2">
-      <img src={src} alt={alt} className="w-7 h-7" />
-      <span className="uppercase font-black text-xl text-white">{alt}</span>
+    <div className="flex items-center gap-3">
+      <img src={src} alt={alt} className="w-9 h-9" />
+      <span className="uppercase font-black text-2xl text-white">{alt}</span>
     </div>
   );
 
@@ -108,12 +108,12 @@ export default function Home() {
                 ].map(({ symbol, value, change }) => (
                   <div
                     key={symbol}
-                    style={{ height: 200 }}
+                    style={{ height: 190 }}
                     className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-6 py-4 rounded-xl"
                   >
                     <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
-                    <div className="flex flex-col items-end text-white leading-tight gap-1">
-                      <span className="text-2xl font-black">
+                    <div className="flex flex-col items-end text-white leading-tight gap-2">
+                      <span className="text-4xl font-black">
                         ${value.toFixed(symbol === "NOT" ? 4 : 2)}
                       </span>
                       <ChangeIndicator value={change} />
