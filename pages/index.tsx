@@ -5,6 +5,8 @@ import html2canvas from "html2canvas";
 import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { ArrowUp, ArrowDown } from "lucide-react";
+import "@fontsource/inter/900.css";
+import Head from "next/head";
 
 interface Rates {
   btc: number;
@@ -63,53 +65,66 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0A0F1C] flex items-center justify-center p-4">
-      <div className="space-y-4">
-        <div
-          ref={ref}
-          className="bg-[#0A0F1C] p-8 rounded-xl text-white shadow-xl"
-          style={{ width: 1080, height: 1080 }}
-        >
-          {!rates ? (
-            <div className="text-white text-2xl text-center mt-40">Загрузка данных...</div>
-          ) : (
-            <div className="space-y-6">
-              <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl">
-                <span>₿</span>
-                <span className="font-bold">${rates.btc.toLocaleString()}</span>
-                <ChangeIndicator value={rates.changes.btc} />
-              </Card>
-              <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl">
-                <span>Ξ</span>
-                <span className="font-bold">${rates.eth.toLocaleString()}</span>
-                <ChangeIndicator value={rates.changes.eth} />
-              </Card>
-              <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl">
-                <span>TON</span>
-                <span className="font-bold">${rates.ton.toFixed(2)}</span>
-                <ChangeIndicator value={rates.changes.ton} />
-              </Card>
-              <Card className="bg-gradient-to-r from-[#0D3C6B] to-[#0A789C] text-white p-6 text-2xl">
-                <div className="text-lg text-blue-200">КУРС ВАЛЮТ</div>
-                <div className="flex justify-between mt-2">
-                  <span>$ {rates.usd.toFixed(2)}</span>
-                  <ChangeIndicator value={rates.changes.usd} />
-                </div>
-                <div className="flex justify-between">
-                  <span>€ {rates.eur.toFixed(2)}</span>
-                  <ChangeIndicator value={rates.changes.eur} />
-                </div>
-              </Card>
-              <Card className="bg-[#0D3C6B] text-center py-12 text-white text-4xl font-semibold">
-                {date}
-              </Card>
-            </div>
-          )}
+    <>
+      <Head>
+        <link
+          rel="preload"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap"
+          as="style"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <main className="min-h-screen bg-[#0A0F1C] flex items-center justify-center p-4 font-inter">
+        <div className="space-y-4">
+          <div
+            ref={ref}
+            className="bg-[#0A0F1C] p-8 rounded-xl text-white shadow-xl"
+            style={{ width: 1080, height: 1080 }}
+          >
+            {!rates ? (
+              <div className="text-white text-2xl text-center mt-40">Загрузка данных...</div>
+            ) : (
+              <div className="space-y-6">
+                <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl font-black">
+                  <span>₿</span>
+                  <span className="font-black">${rates.btc.toLocaleString()}</span>
+                  <ChangeIndicator value={rates.changes.btc} />
+                </Card>
+                <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl font-black">
+                  <span>Ξ</span>
+                  <span className="font-black">${rates.eth.toLocaleString()}</span>
+                  <ChangeIndicator value={rates.changes.eth} />
+                </Card>
+                <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl font-black">
+                  <span>TON</span>
+                  <span className="font-black">${rates.ton.toFixed(2)}</span>
+                  <ChangeIndicator value={rates.changes.ton} />
+                </Card>
+                <Card className="bg-gradient-to-r from-[#0D3C6B] to-[#0A789C] text-white p-6 text-2xl font-black">
+                  <div className="text-lg text-blue-200">КУРС ВАЛЮТ</div>
+                  <div className="flex justify-between mt-2">
+                    <span>$ {rates.usd.toFixed(2)}</span>
+                    <ChangeIndicator value={rates.changes.usd} />
+                  </div>
+                  <div className="flex justify-between">
+                    <span>€ {rates.eur.toFixed(2)}</span>
+                    <ChangeIndicator value={rates.changes.eur} />
+                  </div>
+                </Card>
+                <Card className="bg-[#0D3C6B] text-center py-12 text-white text-4xl font-black">
+                  {date}
+                </Card>
+              </div>
+            )}
+          </div>
+          <Button onClick={handleDownload} className="w-full">
+            Скачать изображение
+          </Button>
         </div>
-        <Button onClick={handleDownload} className="w-full">
-          Скачать изображение
-        </Button>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
