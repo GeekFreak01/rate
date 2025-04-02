@@ -57,8 +57,8 @@ export default function Home() {
     const Arrow = isPositive ? ArrowUp : ArrowDown;
     const color = isPositive ? "text-green-400" : "text-red-400";
     return (
-      <span className={`flex items-center gap-1 text-xl ${color}`}>
-        <Arrow size={18} />
+      <span className={`flex items-center gap-1 text-base ${color}`}>
+        <Arrow size={14} />
         {Math.abs(value).toFixed(2)}%
       </span>
     );
@@ -66,8 +66,8 @@ export default function Home() {
 
   const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
     <div className="flex items-center gap-2">
-      <img src={src} alt={alt} className="w-5 h-5 rounded-full shadow-sm" />
-      <span className="uppercase font-black text-lg">{alt}</span>
+      <img src={src} alt={alt} className="w-4 h-4 rounded-full shadow-sm" />
+      <span className="uppercase font-black text-base">{alt}</span>
     </div>
   );
 
@@ -90,40 +90,39 @@ export default function Home() {
             <div className="bg-white p-4 rounded-xl">
               <div
                 ref={ref}
-                className="bg-[#0A0F1C] p-8 rounded-xl"
+                className="bg-[#0A0F1C] p-8 rounded-xl space-y-4"
                 style={{ width: 1080, height: 1080 }}
               >
                 {!rates ? (
                   <div className="text-white text-2xl text-center mt-40">Загрузка данных...</div>
                 ) : (
-                  <div className="space-y-6">
-                    <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl font-black rounded-2xl shadow-lg ring-1 ring-blue-900">
+                  <div className="space-y-4">
+                    <Card className="bg-[#122742] flex items-center justify-between p-4 text-xl font-black rounded-xl shadow-md ring-1 ring-blue-900">
                       <IconWithLabel src="/icons/btc.svg" alt="BTC" />
-                      <span className="font-black">${rates.btc.toLocaleString()}</span>
+                      <span className="font-black text-xl">${rates.btc.toLocaleString()}</span>
                       <ChangeIndicator value={rates.changes.btc} />
                     </Card>
-                    <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl font-black rounded-2xl shadow-lg ring-1 ring-blue-900">
+                    <Card className="bg-[#122742] flex items-center justify-between p-4 text-xl font-black rounded-xl shadow-md ring-1 ring-blue-900">
                       <IconWithLabel src="/icons/eth.svg" alt="ETH" />
-                      <span className="font-black">${rates.eth.toLocaleString()}</span>
+                      <span className="font-black text-xl">${rates.eth.toLocaleString()}</span>
                       <ChangeIndicator value={rates.changes.eth} />
                     </Card>
-                    <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl font-black rounded-2xl shadow-lg ring-1 ring-blue-900">
+                    <Card className="bg-[#122742] flex items-center justify-between p-4 text-xl font-black rounded-xl shadow-md ring-1 ring-blue-900">
                       <IconWithLabel src="/icons/ton.svg" alt="TON" />
-                      <span className="font-black">${rates.ton.toFixed(2)}</span>
+                      <span className="font-black text-xl">${rates.ton.toFixed(2)}</span>
                       <ChangeIndicator value={rates.changes.ton} />
                     </Card>
-                    <Card className="bg-gradient-to-r from-[#0D3C6B] to-[#0A789C] text-white p-6 text-2xl font-black rounded-2xl shadow-xl">
-                      <div className="text-lg text-blue-200">КУРСЫ ДРУГИХ</div>
-                      <div className="flex justify-between mt-2">
-                        <span>PX {rates.usd.toFixed(2)}</span>
-                        <ChangeIndicator value={rates.changes.usd} />
-                      </div>
-                      <div className="flex justify-between">
-                        <span>GRAM {rates.eur.toFixed(2)}</span>
-                        <ChangeIndicator value={rates.changes.eur} />
-                      </div>
+                    <Card className="bg-[#122742] flex items-center justify-between p-4 text-xl font-black rounded-xl shadow-md ring-1 ring-blue-900">
+                      <IconWithLabel src="/icons/px.svg" alt="PX" />
+                      <span className="font-black text-xl">{rates.usd.toFixed(2)}</span>
+                      <ChangeIndicator value={rates.changes.usd} />
                     </Card>
-                    <Card className="bg-[#0D3C6B] text-center py-12 text-white text-4xl font-black rounded-2xl">
+                    <Card className="bg-[#122742] flex items-center justify-between p-4 text-xl font-black rounded-xl shadow-md ring-1 ring-blue-900">
+                      <IconWithLabel src="/icons/gram.svg" alt="GRAM" />
+                      <span className="font-black text-xl">{rates.eur.toFixed(2)}</span>
+                      <ChangeIndicator value={rates.changes.eur} />
+                    </Card>
+                    <Card className="bg-[#0D3C6B] text-center py-10 text-white text-4xl font-black rounded-xl">
                       {date}
                     </Card>
                   </div>
