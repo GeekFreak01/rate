@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from "react";
 import html2canvas from "html2canvas";
-import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import "@fontsource/inter/900.css";
@@ -84,6 +83,7 @@ export default function Home() {
           rel="stylesheet"
         />
       </Head>
+
       <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-4 font-inter">
         <div className="space-y-4">
           <div
@@ -106,7 +106,7 @@ export default function Home() {
                   { symbol: "NOT", value: rates.not, change: rates.changes.not },
                   { symbol: "SOL", value: rates.sol, change: rates.changes.sol },
                 ].map(({ symbol, value, change }) => (
-                  <Card
+                  <div
                     key={symbol}
                     style={{ height: 200 }}
                     className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-6 py-4 rounded-xl"
@@ -118,11 +118,12 @@ export default function Home() {
                       </span>
                       <ChangeIndicator value={change} />
                     </div>
-                  </Card>
+                  </div>
                 ))}
               </div>
             )}
           </div>
+
           <Button onClick={handleDownload} className="w-full hover:brightness-110 transition">
             Скачать изображение
           </Button>
