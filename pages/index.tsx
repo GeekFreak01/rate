@@ -12,11 +12,11 @@ interface Rates {
   usd: number;
   eur: number;
   changes: {
-    btc: number;
-    eth: number;
-    ton: number;
-    usd: number;
-    eur: number;
+    btc?: number;
+    eth?: number;
+    ton?: number;
+    usd?: number;
+    eur?: number;
   };
 }
 
@@ -48,6 +48,10 @@ export default function Home() {
     link.click();
   };
 
+  const formatChange = (value?: number) => {
+    return typeof value === "number" ? `↑ ${value.toFixed(2)}%` : "—";
+  };
+
   return (
     <main className="min-h-screen bg-[#0A0F1C] flex items-center justify-center p-4">
       <div className="space-y-4">
@@ -64,32 +68,36 @@ export default function Home() {
                 <span>₿</span>
                 <span className="font-bold">${rates.btc.toLocaleString()}</span>
                 <span className="text-green-400 text-xl">
-                  ↑ {rates.changes.btc.toFixed(2)}%
+                  {formatChange(rates.changes.btc)}
                 </span>
               </Card>
               <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl">
                 <span>Ξ</span>
                 <span className="font-bold">${rates.eth.toLocaleString()}</span>
                 <span className="text-green-400 text-xl">
-                  ↑ {rates.changes.eth.toFixed(2)}%
+                  {formatChange(rates.changes.eth)}
                 </span>
               </Card>
               <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl">
                 <span>TON</span>
                 <span className="font-bold">${rates.ton.toFixed(2)}</span>
                 <span className="text-green-400 text-xl">
-                  ↑ {rates.changes.ton.toFixed(2)}%
+                  {formatChange(rates.changes.ton)}
                 </span>
               </Card>
               <Card className="bg-gradient-to-r from-[#0D3C6B] to-[#0A789C] text-white p-6 text-2xl">
                 <div className="text-lg text-blue-200">КУРС ВАЛЮТ</div>
                 <div className="flex justify-between mt-2">
                   <span>$ {rates.usd.toFixed(2)}</span>
-                  <span className="text-green-300">↑</span>
+                  <span className="text-green-300">
+                    {formatChange(rates.changes.usd)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>€ {rates.eur.toFixed(2)}</span>
-                  <span className="text-green-300">↑</span>
+                  <span className="text-green-300">
+                    {formatChange(rates.changes.eur)}
+                  </span>
                 </div>
               </Card>
               <Card className="bg-[#0D3C6B] text-center py-12 text-white text-4xl font-semibold">
