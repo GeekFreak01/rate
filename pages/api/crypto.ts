@@ -1,44 +1,45 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-const COINGECKO_API = "https://api.coingecko.com/api/v3/simple/price";
+interface Coin {
+  symbol: string;
+  price_usd: string;
+  percent_change_24h: string;
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const params = new URLSearchParams({
-      ids: "bitcoin,ethereum,toncoin",
-      vs_currencies: "usd",
-      include_24hr_change: "true",
-    });
+    const response = await fetch("https://api.coinlore.net/api/tickers/?limit=50");
+    const data = await response.json();
 
-    const fiatParams = new URLSearchParams({
-      ids: "usd,eur",
-      vs_currencies: "rub",
-      include_24hr_change: "true",
-    });
+    const coins = data.data as Coin[];
 
-    const [cryptoRes, fiatRes] = await Promise.all([
-      fetch(`${COINGECKO_API}?${params.toString()}`),
-      fetch(`${COINGECKO_API}?${fiatParams.toString()}`),
-    ]);
+    const getCoin = (symbol: string) =>
+      coins.find((coin) => coin.symbol.toUpperCase() === symbol.toUpperCase());
 
-    const cryptoData = await cryptoRes.json();
-    const fiatData = await fiatRes.json();
+    const btc = getCoin("BTC");
+    const eth = getCoin("ETH");
+    const ton = getCoin("TON");
+
+    if (!btc || !eth || !ton) {
+      return res.status(500).json({ error: "Coin data not found" });
+    }
 
     res.status(200).json({
-      btc: cryptoData.bitcoin.usd,
-      eth: cryptoData.ethereum.usd,
-      ton: cryptoData.toncoin.usd,
-      usd: fiatData.usd.rub,
-      eur: fiatData.eur.rub,
+      btc: parseFloat(btc.price_usd),
+      eth: parseFloat(eth.price_usd),
+      ton: parseFloat(ton.price_usd),
+      usd: 1, // фиктивно, так как CoinLore не отдаёт фиат
+      eur: 1,
       changes: {
-        btc: cryptoData.bitcoin.usd_24h_change,
-        eth: cryptoData.ethereum.usd_24h_change,
-        ton: cryptoData.toncoin.usd_24h_change,
-        usd: fiatData.usd.rub_24h_change,
-        eur: fiatData.eur.rub_24h_change,
+        btc: parseFloat(btc.percent_change_24h),
+        eth: parseFloat(eth.percent_change_24h),
+        ton: parseFloat(ton.percent_change_24h),
+        usd: 0,
+        eur: 0,
       },
     });
   } catch (err) {
-    res.status(500).json({ error: "Failed to fetch rates" });
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch data from CoinLore" });
   }
 }
