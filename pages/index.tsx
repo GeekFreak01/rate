@@ -63,9 +63,14 @@ export default function Home() {
     );
   };
 
+  const formatValue = (symbol: string, value: number): string => {
+    if (symbol === "NOT") return value.toFixed(4);
+    return value > 100 ? Math.round(value).toString() : value.toFixed(2);
+  };
+
   const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
     <div className="flex items-center gap-3">
-      <img src={src} alt={alt} className="w-9 h-9" />
+      <img src={src} alt={alt} className="w-12 h-12" />
       <span className="uppercase font-black text-2xl text-white">{alt}</span>
     </div>
   );
@@ -114,7 +119,7 @@ export default function Home() {
                     <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
                     <div className="flex flex-col items-end text-white leading-tight gap-2">
                       <span className="text-4xl font-black">
-                        ${value.toFixed(symbol === "NOT" ? 4 : 2)}
+                        ${formatValue(symbol, value)}
                       </span>
                       <ChangeIndicator value={change} />
                     </div>
