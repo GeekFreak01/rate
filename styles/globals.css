@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Глобальный шрифт Inter Black */
 body {
   font-family: 'Inter', sans-serif;
+  background-color: #0a0f1c;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Убираем margin/padding по умолчанию */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Картинки — без влияния глобального размера */
+img {
+  max-width: unset;
+  height: auto;
+  display: inline-block;
+}
+
+/* Плавность для кнопок и стрелок */
+button, a, span, svg {
+  transition: all 0.2s ease-in-out;
 }
