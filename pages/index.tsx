@@ -57,7 +57,7 @@ export default function Home() {
     const Arrow = isPositive ? ArrowUp : ArrowDown;
     const color = isPositive ? "text-green-400" : "text-red-400";
     return (
-      <span className={`flex items-center gap-1 text-base ${color}`}>
+      <span className={`flex items-center gap-1 text-sm ${color}`}>
         <Arrow size={14} />
         {Math.abs(value).toFixed(2)}%
       </span>
@@ -66,8 +66,8 @@ export default function Home() {
 
   const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
     <div className="flex items-center gap-2">
-      <img src={src} alt={alt} className="w-[14px] h-[14px] rounded-full shadow-sm" />
-      <span className="uppercase font-black text-base">{alt}</span>
+      <img src={src} alt={alt} className="w-[16px] h-[16px] rounded-full" />
+      <span className="uppercase font-black text-sm tracking-wide text-white">{alt}</span>
     </div>
   );
 
@@ -84,50 +84,41 @@ export default function Home() {
           rel="stylesheet"
         />
       </Head>
-      <main className="min-h-screen bg-gradient-to-br from-[#0A0F1C] to-[#0F1D2E] flex items-center justify-center p-4 font-inter">
+      <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-4 font-inter">
         <div className="space-y-4">
-          <div className="bg-[#0A0F1C] p-4 rounded-xl text-white shadow-xl">
-            <div className="bg-white p-4 rounded-xl">
-              <div
-                ref={ref}
-                className="bg-[#0A0F1C] p-8 rounded-xl space-y-4"
-                style={{ width: 1080, height: 1080 }}
-              >
-                {!rates ? (
-                  <div className="text-white text-2xl text-center mt-40">Загрузка данных...</div>
-                ) : (
+          <div className="bg-[#111827] p-6 rounded-3xl shadow-2xl border border-[#1f2937]">
+            <div
+              ref={ref}
+              className="bg-gradient-to-br from-[#0a0f1c] to-[#111827] rounded-2xl p-8 w-[1080px] h-[1080px] flex flex-col justify-between"
+            >
+              {!rates ? (
+                <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
+              ) : (
+                <>
                   <div className="space-y-4">
-                    <Card className="bg-[#122742] flex items-center justify-between p-4 text-xl font-black rounded-xl shadow-md ring-1 ring-blue-900">
-                      <IconWithLabel src="/icons/btc.svg" alt="BTC" />
-                      <span className="font-black text-xl">${rates.btc.toLocaleString()}</span>
-                      <ChangeIndicator value={rates.changes.btc} />
-                    </Card>
-                    <Card className="bg-[#122742] flex items-center justify-between p-4 text-xl font-black rounded-xl shadow-md ring-1 ring-blue-900">
-                      <IconWithLabel src="/icons/eth.svg" alt="ETH" />
-                      <span className="font-black text-xl">${rates.eth.toLocaleString()}</span>
-                      <ChangeIndicator value={rates.changes.eth} />
-                    </Card>
-                    <Card className="bg-[#122742] flex items-center justify-between p-4 text-xl font-black rounded-xl shadow-md ring-1 ring-blue-900">
-                      <IconWithLabel src="/icons/ton.svg" alt="TON" />
-                      <span className="font-black text-xl">${rates.ton.toFixed(2)}</span>
-                      <ChangeIndicator value={rates.changes.ton} />
-                    </Card>
-                    <Card className="bg-[#122742] flex items-center justify-between p-4 text-xl font-black rounded-xl shadow-md ring-1 ring-blue-900">
-                      <IconWithLabel src="/icons/not.svg" alt="NOT" />
-                      <span className="font-black text-xl">${rates.not.toFixed(4)}</span>
-                      <ChangeIndicator value={rates.changes.not} />
-                    </Card>
-                    <Card className="bg-[#122742] flex items-center justify-between p-4 text-xl font-black rounded-xl shadow-md ring-1 ring-blue-900">
-                      <IconWithLabel src="/icons/sol.svg" alt="SOL" />
-                      <span className="font-black text-xl">${rates.sol.toFixed(2)}</span>
-                      <ChangeIndicator value={rates.changes.sol} />
-                    </Card>
-                    <Card className="bg-[#0D3C6B] text-center py-10 text-white text-4xl font-black rounded-xl">
-                      {date}
-                    </Card>
+                    {[
+                      { symbol: "BTC", value: rates.btc, change: rates.changes.btc },
+                      { symbol: "ETH", value: rates.eth, change: rates.changes.eth },
+                      { symbol: "TON", value: rates.ton, change: rates.changes.ton },
+                      { symbol: "NOT", value: rates.not, change: rates.changes.not },
+                      { symbol: "SOL", value: rates.sol, change: rates.changes.sol },
+                    ].map(({ symbol, value, change }) => (
+                      <Card
+                        key={symbol}
+                        className="bg-[#1c1f2a] flex items-center justify-between px-6 py-4 rounded-xl shadow-md border border-[#2a2e3a]"
+                      >
+                        <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
+                        <span className="text-xl text-white font-black">${value.toFixed(symbol === "NOT" ? 4 : 2)}</span>
+                        <ChangeIndicator value={change} />
+                      </Card>
+                    ))}
                   </div>
-                )}
-              </div>
+
+                  <div className="text-center pt-8 text-white text-4xl font-black tracking-wider">
+                    {date}
+                  </div>
+                </>
+              )}
             </div>
           </div>
           <Button onClick={handleDownload} className="w-full hover:brightness-110 transition">
