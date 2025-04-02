@@ -92,44 +92,53 @@ export default function Home() {
 
       <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-4 font-inter">
         <div className="space-y-4">
-          <div
-            className="relative rounded-3xl shadow-2xl border border-[#00d2ff]/10 bg-[#0a0f1c]"
-            ref={ref}
-            style={{ width: 1080, height: 1080 }}
-          >
-            {!rates ? (
-              <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
-            ) : (
-              <div className="flex flex-col justify-between h-full p-6 pt-24 relative gap-4">
-                <div className="absolute top-10 left-6 text-white text-4xl font-black">
-                  {date}
-                </div>
-
-                {[
-                  { symbol: "BTC", value: rates.btc, change: rates.changes.btc },
-                  { symbol: "ETH", value: rates.eth, change: rates.changes.eth },
-                  { symbol: "TON", value: rates.ton, change: rates.changes.ton },
-                  { symbol: "NOT", value: rates.not, change: rates.changes.not },
-                  { symbol: "SOL", value: rates.sol, change: rates.changes.sol },
-                ].map(({ symbol, value, change }) => (
-                  <div
-                    key={symbol}
-                    style={{ height: 190 }}
-                    className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-6 py-4 rounded-xl"
-                  >
-                    <IconWithLabel symbol={symbol} />
-                    <div className="flex flex-col items-end text-white leading-tight gap-2">
-                      <span className="text-4xl font-black">
-                        ${formatValue(symbol, value)}
-                      </span>
-                      <ChangeIndicator value={change} />
-                    </div>
+          {/* Внешняя оболочка (не попадает в canvas) */}
+          <div className="relative" style={{ width: 1080, height: 1080 }}>
+            {/* Сам canvas */}
+            <div
+              ref={ref}
+              className="rounded-3xl shadow-2xl border border-[#00d2ff]/10 bg-[#0a0f1c] w-full h-full"
+            >
+              {!rates ? (
+                <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
+              ) : (
+                <div className="flex flex-col justify-between h-full p-6 pt-24 relative gap-4">
+                  {/* Дата */}
+                  <div className="absolute top-10 left-6 text-white text-4xl font-black">
+                    {date}
                   </div>
-                ))}
-              </div>
-            )}
+
+                  {/* Карточки */}
+                  {[
+                    { symbol: "BTC", value: rates.btc, change: rates.changes.btc },
+                    { symbol: "ETH", value: rates.eth, change: rates.changes.eth },
+                    { symbol: "TON", value: rates.ton, change: rates.changes.ton },
+                    { symbol: "NOT", value: rates.not, change: rates.changes.not },
+                    { symbol: "SOL", value: rates.sol, change: rates.changes.sol },
+                  ].map(({ symbol, value, change }) => (
+                    <div
+                      key={symbol}
+                      style={{ height: 190 }}
+                      className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-6 py-4 rounded-xl"
+                    >
+                      <IconWithLabel symbol={symbol} />
+                      <div className="flex flex-col items-end text-white leading-tight gap-2">
+                        <span className="text-4xl font-black">
+                          ${formatValue(symbol, value)}
+                        </span>
+                        <ChangeIndicator value={change} />
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Водяной знак */}
+                  <div className="text-center text-white/40 text-lg pt-2 font-bold">peeton</div>
+                </div>
+              )}
+            </div>
           </div>
 
+          {/* Кнопка скачивания */}
           <Button onClick={handleDownload} className="w-full hover:brightness-110 transition">
             Скачать изображение
           </Button>
