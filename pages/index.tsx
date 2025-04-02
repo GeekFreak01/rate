@@ -69,9 +69,9 @@ export default function Home() {
   };
 
   const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
-    <div className="flex items-center gap-3">
-      <img src={src} alt={alt} className="w-12 h-12" />
-      <span className="uppercase font-black text-2xl text-white">{alt}</span>
+    <div className="flex items-center gap-4">
+      <img src={src} alt={alt} className="w-16 h-16" />
+      <span className="uppercase font-black text-4xl text-white">{alt}</span>
     </div>
   );
 
@@ -99,8 +99,9 @@ export default function Home() {
             {!rates ? (
               <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
             ) : (
-              <div className="flex flex-col justify-between h-full p-6 pt-12 relative">
-                <div className="absolute top-6 left-6 text-white text-xl font-black">
+              <div className="flex flex-col justify-between h-full p-6 pt-16 relative">
+                {/* Дата с отступом от верхнего края */}
+                <div className="absolute top-10 left-6 text-white text-xl font-black">
                   {date}
                 </div>
 
