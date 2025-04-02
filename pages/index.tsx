@@ -65,9 +65,9 @@ export default function Home() {
   };
 
   const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
-    <div className="flex items-center gap-2">
-      <img src={src} alt={alt} className="w-[16px] h-[16px] rounded-full" />
-      <span className="uppercase font-black text-sm tracking-wide text-white">{alt}</span>
+    <div className="flex items-center gap-1">
+      <img src={src} alt={alt} className="w-[14px] h-[14px]" />
+      <span className="text-sm text-white font-black uppercase tracking-wide">{alt}</span>
     </div>
   );
 
@@ -108,7 +108,9 @@ export default function Home() {
                         className="bg-[#1c1f2a] flex items-center justify-between px-6 py-4 rounded-xl shadow-md border border-[#2a2e3a]"
                       >
                         <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
-                        <span className="text-xl text-white font-black">${value.toFixed(symbol === "NOT" ? 4 : 2)}</span>
+                        <span className="text-xl text-white font-black">
+                          ${value.toFixed(symbol === "NOT" ? 4 : 2)}
+                        </span>
                         <ChangeIndicator value={change} />
                       </Card>
                     ))}
