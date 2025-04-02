@@ -66,7 +66,7 @@ export default function Home() {
 
   const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
     <div className="flex items-center gap-2">
-      <img src={src} alt={alt} className="w-[14px] h-[14px]" />
+      <img src={src} alt={alt} className="w-6 h-6" />
       <span className="uppercase font-black text-sm text-white">{alt}</span>
     </div>
   );
@@ -95,7 +95,9 @@ export default function Home() {
               <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
             ) : (
               <div className="flex flex-col justify-between h-full p-6">
-                <div className="space-y-2">
+                <div className="text-center text-white text-3xl font-black pb-4">{date}</div>
+
+                <div className="space-y-3">
                   {[
                     { symbol: "BTC", value: rates.btc, change: rates.changes.btc },
                     { symbol: "ETH", value: rates.eth, change: rates.changes.eth },
@@ -105,17 +107,20 @@ export default function Home() {
                   ].map(({ symbol, value, change }) => (
                     <Card
                       key={symbol}
-                      className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-3 py-1.5 rounded-xl"
+                      className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-4 py-2 rounded-xl"
                     >
-                      <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
+                      <div className="flex items-center gap-4">
+                        <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
+                      </div>
                       <div className="flex flex-col items-end text-white leading-tight gap-0.5">
-                        <span className="text-base font-bold">${value.toFixed(symbol === "NOT" ? 4 : 2)}</span>
+                        <span className="text-base font-bold">
+                          ${value.toFixed(symbol === "NOT" ? 4 : 2)}
+                        </span>
                         <ChangeIndicator value={change} />
                       </div>
                     </Card>
                   ))}
                 </div>
-                <div className="text-center pt-6 text-white text-3xl font-black">{date}</div>
               </div>
             )}
           </div>
