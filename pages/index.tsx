@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import html2canvas from "html2canvas";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card } from "../components/ui/card";
+import { Button } from "../components/ui/button";
 
 interface Rates {
   btc: number;
@@ -98,4 +98,3 @@ export default function Home() {
     </main>
   );
 }
-
