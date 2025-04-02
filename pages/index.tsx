@@ -12,14 +12,14 @@ interface Rates {
   btc: number;
   eth: number;
   ton: number;
-  usd: number;
-  eur: number;
+  not: number;
+  sol: number;
   changes: {
     btc?: number;
     eth?: number;
     ton?: number;
-    usd?: number;
-    eur?: number;
+    not?: number;
+    sol?: number;
   };
 }
 
@@ -66,7 +66,7 @@ export default function Home() {
 
   const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
     <div className="flex items-center gap-2">
-      <img src={src} alt={alt} className="w-4 h-4 rounded-full shadow-sm" />
+      <img src={src} alt={alt} className="w-[14px] h-[14px] rounded-full shadow-sm" />
       <span className="uppercase font-black text-base">{alt}</span>
     </div>
   );
@@ -113,14 +113,14 @@ export default function Home() {
                       <ChangeIndicator value={rates.changes.ton} />
                     </Card>
                     <Card className="bg-[#122742] flex items-center justify-between p-4 text-xl font-black rounded-xl shadow-md ring-1 ring-blue-900">
-                      <IconWithLabel src="/icons/px.svg" alt="PX" />
-                      <span className="font-black text-xl">{rates.usd.toFixed(2)}</span>
-                      <ChangeIndicator value={rates.changes.usd} />
+                      <IconWithLabel src="/icons/not.svg" alt="NOT" />
+                      <span className="font-black text-xl">${rates.not.toFixed(4)}</span>
+                      <ChangeIndicator value={rates.changes.not} />
                     </Card>
                     <Card className="bg-[#122742] flex items-center justify-between p-4 text-xl font-black rounded-xl shadow-md ring-1 ring-blue-900">
-                      <IconWithLabel src="/icons/gram.svg" alt="GRAM" />
-                      <span className="font-black text-xl">{rates.eur.toFixed(2)}</span>
-                      <ChangeIndicator value={rates.changes.eur} />
+                      <IconWithLabel src="/icons/sol.svg" alt="SOL" />
+                      <span className="font-black text-xl">${rates.sol.toFixed(2)}</span>
+                      <ChangeIndicator value={rates.changes.sol} />
                     </Card>
                     <Card className="bg-[#0D3C6B] text-center py-10 text-white text-4xl font-black rounded-xl">
                       {date}
