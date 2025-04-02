@@ -64,6 +64,13 @@ export default function Home() {
     );
   };
 
+  const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
+    <div className="flex items-center gap-2">
+      <img src={src} alt={alt} className="w-8 h-8" />
+      <span className="uppercase font-black">{alt}</span>
+    </div>
+  );
+
   return (
     <>
       <Head>
@@ -89,17 +96,17 @@ export default function Home() {
             ) : (
               <div className="space-y-6">
                 <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl font-black">
-                  <span>₿</span>
+                  <IconWithLabel src="/icons/btc.svg" alt="BTC" />
                   <span className="font-black">${rates.btc.toLocaleString()}</span>
                   <ChangeIndicator value={rates.changes.btc} />
                 </Card>
                 <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl font-black">
-                  <span>Ξ</span>
+                  <IconWithLabel src="/icons/eth.svg" alt="ETH" />
                   <span className="font-black">${rates.eth.toLocaleString()}</span>
                   <ChangeIndicator value={rates.changes.eth} />
                 </Card>
                 <Card className="bg-[#122742] flex items-center justify-between p-6 text-3xl font-black">
-                  <span>TON</span>
+                  <IconWithLabel src="/icons/ton.svg" alt="TON" />
                   <span className="font-black">${rates.ton.toFixed(2)}</span>
                   <ChangeIndicator value={rates.changes.ton} />
                 </Card>
