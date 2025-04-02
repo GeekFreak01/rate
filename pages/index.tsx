@@ -57,17 +57,17 @@ export default function Home() {
     const Arrow = isPositive ? ArrowUp : ArrowDown;
     const color = isPositive ? "text-green-400" : "text-red-400";
     return (
-      <span className={`flex items-center gap-1 text-sm ${color}`}>
-        <Arrow size={14} />
+      <span className={`flex items-center gap-1 text-xs ${color}`}>
+        <Arrow size={12} />
         {Math.abs(value).toFixed(2)}%
       </span>
     );
   };
 
   const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-2">
       <img src={src} alt={alt} className="w-[14px] h-[14px]" />
-      <span className="text-sm text-white font-black uppercase tracking-wide">{alt}</span>
+      <span className="uppercase font-black text-sm text-white">{alt}</span>
     </div>
   );
 
@@ -86,42 +86,40 @@ export default function Home() {
       </Head>
       <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-4 font-inter">
         <div className="space-y-4">
-          <div className="bg-[#111827] p-6 rounded-3xl shadow-2xl border border-[#1f2937]">
-            <div
-              ref={ref}
-              className="bg-gradient-to-br from-[#0a0f1c] to-[#111827] rounded-2xl p-8 w-[1080px] h-[1080px] flex flex-col justify-between"
-            >
-              {!rates ? (
-                <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
-              ) : (
-                <>
-                  <div className="space-y-4">
-                    {[
-                      { symbol: "BTC", value: rates.btc, change: rates.changes.btc },
-                      { symbol: "ETH", value: rates.eth, change: rates.changes.eth },
-                      { symbol: "TON", value: rates.ton, change: rates.changes.ton },
-                      { symbol: "NOT", value: rates.not, change: rates.changes.not },
-                      { symbol: "SOL", value: rates.sol, change: rates.changes.sol },
-                    ].map(({ symbol, value, change }) => (
-                      <Card
-                        key={symbol}
-                        className="bg-[#1c1f2a] flex items-center justify-between px-6 py-4 rounded-xl shadow-md border border-[#2a2e3a]"
-                      >
-                        <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
-                        <span className="text-xl text-white font-black">
+          <div
+            className="rounded-3xl shadow-2xl border border-[#00d2ff]/10 bg-gradient-to-b from-[#081520] to-[#0a0f1c]"
+            ref={ref}
+            style={{ width: 1080, height: 1080 }}
+          >
+            {!rates ? (
+              <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
+            ) : (
+              <div className="flex flex-col justify-between h-full p-6">
+                <div className="space-y-3">
+                  {[
+                    { symbol: "BTC", value: rates.btc, change: rates.changes.btc },
+                    { symbol: "ETH", value: rates.eth, change: rates.changes.eth },
+                    { symbol: "TON", value: rates.ton, change: rates.changes.ton },
+                    { symbol: "NOT", value: rates.not, change: rates.changes.not },
+                    { symbol: "SOL", value: rates.sol, change: rates.changes.sol },
+                  ].map(({ symbol, value, change }) => (
+                    <Card
+                      key={symbol}
+                      className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-4 py-2 rounded-xl"
+                    >
+                      <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
+                      <div className="flex flex-col items-end text-white">
+                        <span className="text-base font-bold">
                           ${value.toFixed(symbol === "NOT" ? 4 : 2)}
                         </span>
                         <ChangeIndicator value={change} />
-                      </Card>
-                    ))}
-                  </div>
-
-                  <div className="text-center pt-8 text-white text-4xl font-black tracking-wider">
-                    {date}
-                  </div>
-                </>
-              )}
-            </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+                <div className="text-center pt-6 text-white text-3xl font-black">{date}</div>
+              </div>
+            )}
           </div>
           <Button onClick={handleDownload} className="w-full hover:brightness-110 transition">
             Скачать изображение
