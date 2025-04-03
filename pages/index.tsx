@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useEffect, useState, useRef } from "react";
 import html2canvas from "html2canvas";
 import { ArrowUp, ArrowDown, CalendarDays } from "lucide-react";
