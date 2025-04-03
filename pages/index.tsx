@@ -39,7 +39,7 @@ export default function Home() {
 
   const handleDownload = async () => {
     if (!ref.current) return;
-    const canvas = await html2canvas(ref.current);
+    const canvas = await html2canvas(ref.current, { useCORS: true });
     const link = document.createElement("a");
     link.download = `курс_${date}.png`;
     link.href = canvas.toDataURL("image/png");
@@ -67,7 +67,7 @@ export default function Home() {
     highlight?: boolean;
   }) => (
     <div
-      className={`rounded-xl px-6 py-4 flex items-center justify-between ${
+      className={`rounded-xl px-6 py-4 flex items-center justify-between w-full h-full ${
         highlight ? "bg-[#00f0ff20]" : "bg-[#03202e]"
       }`}
     >
@@ -89,72 +89,71 @@ export default function Home() {
       </Head>
       <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-4 font-inter">
         <div className="space-y-4">
+          {/* Рамка */}
           <div
             ref={ref}
-            className="rounded-3xl border border-[#00d2ff]/10 bg-[#0a0f1c] w-[1080px] h-[580px] px-6 py-4 grid grid-cols-2 gap-4"
+            className="rounded-3xl border border-[#00d2ff]/10 bg-[#0a0f1c] w-[1080px] h-[580px] px-6 py-4"
           >
             {!rates ? (
               <div className="text-white text-xl">Загрузка...</div>
             ) : (
-              <>
-                {/* Левый столбец */}
-                <div className="flex flex-col gap-4">
-                  <Card>
-                    <IconWithLabel symbol="BTC" />
-                    <div className="text-right">
-                      <p className="text-white text-xl font-black">
-                        ${rates.btc.toLocaleString()}
-                      </p>
-                      <ChangeIndicator value={rates.changes.btc} />
-                    </div>
-                  </Card>
-                  <Card>
-                    <IconWithLabel symbol="ETH" />
-                    <div className="text-right">
-                      <p className="text-white text-xl font-black">
-                        ${rates.eth.toLocaleString()}
-                      </p>
-                      <ChangeIndicator value={rates.changes.eth} />
-                    </div>
-                  </Card>
-                  <Card>
-                    <IconWithLabel symbol="SOL" />
-                    <div className="text-right">
-                      <p className="text-white text-xl font-black">
-                        ${rates.sol.toLocaleString()}
-                      </p>
-                      <ChangeIndicator value={rates.changes.sol} />
-                    </div>
-                  </Card>
-                </div>
+              <div className="grid grid-cols-2 gap-x-6 gap-y-4 h-full">
+                {/* Левая колонка */}
+                <Card>
+                  <IconWithLabel symbol="BTC" />
+                  <div className="text-right">
+                    <p className="text-white text-xl font-black">
+                      ${rates.btc.toLocaleString()}
+                    </p>
+                    <ChangeIndicator value={rates.changes.btc} />
+                  </div>
+                </Card>
+                <Card>
+                  <IconWithLabel symbol="ETH" />
+                  <div className="text-right">
+                    <p className="text-white text-xl font-black">
+                      ${rates.eth.toLocaleString()}
+                    </p>
+                    <ChangeIndicator value={rates.changes.eth} />
+                  </div>
+                </Card>
+                <Card>
+                  <IconWithLabel symbol="SOL" />
+                  <div className="text-right">
+                    <p className="text-white text-xl font-black">
+                      ${rates.sol.toLocaleString()}
+                    </p>
+                    <ChangeIndicator value={rates.changes.sol} />
+                  </div>
+                </Card>
 
-                {/* Правый столбец */}
-                <div className="flex flex-col gap-4">
-                  <Card>
-                    <IconWithLabel symbol="TON" />
-                    <div className="text-right">
-                      <p className="text-white text-xl font-black">${rates.ton.toFixed(2)}</p>
-                      <ChangeIndicator value={rates.changes.ton} />
-                    </div>
-                  </Card>
-                  <Card>
-                    <IconWithLabel symbol="NOT" />
-                    <div className="text-right">
-                      <p className="text-white text-xl font-black">${rates.not.toFixed(4)}</p>
-                      <ChangeIndicator value={rates.changes.not} />
-                    </div>
-                  </Card>
-                  <Card highlight>
-                    <div className="flex items-center gap-3">
-                      <img src="/icons/calendar.svg" className="w-8 h-8" alt="calendar" />
-                      <span className="text-white text-2xl font-black">{date}</span>
-                    </div>
-                    <span />
-                  </Card>
-                </div>
-              </>
+                {/* Правая колонка */}
+                <Card>
+                  <IconWithLabel symbol="TON" />
+                  <div className="text-right">
+                    <p className="text-white text-xl font-black">${rates.ton.toFixed(2)}</p>
+                    <ChangeIndicator value={rates.changes.ton} />
+                  </div>
+                </Card>
+                <Card>
+                  <IconWithLabel symbol="NOT" />
+                  <div className="text-right">
+                    <p className="text-white text-xl font-black">${rates.not.toFixed(4)}</p>
+                    <ChangeIndicator value={rates.changes.not} />
+                  </div>
+                </Card>
+                <Card highlight>
+                  <div className="flex items-center gap-3">
+                    <img src="/icons/calendar.svg" className="w-8 h-8" alt="calendar" />
+                    <span className="text-white text-2xl font-black">{date}</span>
+                  </div>
+                  <span />
+                </Card>
+              </div>
             )}
           </div>
+
+          {/* Кнопка */}
           <button
             onClick={handleDownload}
             className="bg-white hover:bg-gray-100 px-6 py-3 rounded-xl text-black font-bold text-lg w-full"
