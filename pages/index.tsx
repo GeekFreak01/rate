@@ -29,9 +29,9 @@ export default function Home() {
 
   useEffect(() => {
     const today = new Date();
-    const day = String(today.getDate()).padStart(2, "0");
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    setDate(`${day}.${month}`);
+    const day = today.getDate();
+    const month = today.toLocaleString("en-US", { month: "long" });
+    setDate(`${day} ${month}`);
     fetch("/api/crypto")
       .then((res) => res.json())
       .then((data) => setRates(data))
@@ -87,7 +87,14 @@ export default function Home() {
       className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex flex-col justify-center px-6 py-4 rounded-xl w-[500px] h-[160px]"
     >
       {isDate ? (
-        <span className="text-white text-4xl font-black">{value}</span>
+        <div className="flex items-center gap-4">
+          <img
+            src="https://www.svgrepo.com/show/354301/calendar.svg"
+            alt="calendar"
+            className="w-10 h-10"
+          />
+          <span className="text-white text-4xl font-black">{date}</span>
+        </div>
       ) : (
         <div className="flex items-center justify-between w-full">
           <IconWithLabel symbol={symbol} />
@@ -116,9 +123,7 @@ export default function Home() {
 
       <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-4 font-inter">
         <div className="space-y-4">
-          {/* Внешняя оболочка */}
           <div className="relative" style={{ width: 1080, height: 1080 }}>
-            {/* Сам canvas */}
             <div
               ref={ref}
               className="rounded-3xl border border-[#00d2ff]/10 bg-[#0a0f1c] w-full h-full p-6"
@@ -127,7 +132,6 @@ export default function Home() {
                 <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
               ) : (
                 <div className="grid grid-cols-2 gap-x-6 gap-y-6">
-                  {/* Левый столбец */}
                   {renderCard("BTC", rates.btc, rates.changes.btc)}
                   {renderCard("TON", rates.ton, rates.changes.ton)}
                   {renderCard("ETH", rates.eth, rates.changes.eth)}
@@ -139,7 +143,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Кнопка */}
           <Button onClick={handleDownload} className="w-full hover:brightness-110 transition">
             Скачать изображение
           </Button>
