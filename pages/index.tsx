@@ -40,7 +40,9 @@ export default function Home() {
 
   const handleDownload = async () => {
     if (!ref.current) return;
-    const canvas = await html2canvas(ref.current);
+    const canvas = await html2canvas(ref.current, {
+      useCORS: true,
+    });
     const link = document.createElement("a");
     link.download = `курс_${date}.png`;
     link.href = canvas.toDataURL("image/png");
@@ -68,7 +70,7 @@ export default function Home() {
   const IconWithLabel = ({ symbol }: { symbol: string }) => (
     <div className="flex items-center gap-4">
       <img
-        src={`https://rate-jade.vercel.app/icons/${symbol.toLowerCase()}.svg`}
+        src={`/icons/${symbol.toLowerCase()}.svg`}
         alt={symbol}
         className="w-20 h-20"
       />
@@ -84,16 +86,14 @@ export default function Home() {
   ) => (
     <div
       key={symbol}
-      className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex flex-col justify-center px-6 py-4 rounded-xl w-[500px] h-[160px]"
+      className={`${
+        isDate ? "bg-[#00f0ff20]" : "bg-[#00d2ff20]"
+      } border border-[#00f0ff40] backdrop-blur-sm flex flex-col justify-center px-6 py-4 rounded-xl w-[470px] h-[150px]`}
     >
       {isDate ? (
         <div className="flex items-center justify-between w-full h-full">
           <div className="flex items-center gap-4">
-            <img
-              src="/icons/calendar.svg"
-              alt="calendar"
-              className="w-16 h-16"
-            />
+            <img src="/icons/calendar.svg" alt="calendar" className="w-16 h-16" />
             <span className="text-white text-5xl font-black">{date}</span>
           </div>
         </div>
@@ -125,13 +125,15 @@ export default function Home() {
 
       <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-4 font-inter">
         <div className="space-y-4">
-          <div className="relative" style={{ width: 1080, height: 1080 }}>
+          <div className="relative" style={{ width: 980, height: 980 }}>
             <div
               ref={ref}
               className="rounded-3xl border border-[#00d2ff]/10 bg-[#0a0f1c] w-full h-full p-6"
             >
               {!rates ? (
-                <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
+                <div className="text-white text-xl text-center mt-40">
+                  Загрузка данных...
+                </div>
               ) : (
                 <div className="grid grid-cols-2 gap-x-6 gap-y-6">
                   {renderCard("BTC", rates.btc, rates.changes.btc)}
