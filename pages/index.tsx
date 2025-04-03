@@ -87,13 +87,15 @@ export default function Home() {
       className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex flex-col justify-center px-6 py-4 rounded-xl w-[500px] h-[160px]"
     >
       {isDate ? (
-        <div className="flex items-center gap-4">
-          <img
-            src="https://www.svgrepo.com/show/354301/calendar.svg"
-            alt="calendar"
-            className="w-10 h-10"
-          />
-          <span className="text-white text-4xl font-black">{date}</span>
+        <div className="flex items-center justify-between w-full h-full">
+          <div className="flex items-center gap-4">
+            <img
+              src="/icons/calendar.svg"
+              alt="calendar"
+              className="w-16 h-16"
+            />
+            <span className="text-white text-5xl font-black">{date}</span>
+          </div>
         </div>
       ) : (
         <div className="flex items-center justify-between w-full">
