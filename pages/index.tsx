@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import html2canvas from "html2canvas";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 import "@fontsource/inter/900.css";
 import Head from "next/head";
 
@@ -46,16 +46,20 @@ export default function Home() {
     link.click();
   };
 
+  const formatValue = (val: number) => {
+    return val >= 100 ? Math.round(val).toLocaleString() : val.toFixed(val < 1 ? 4 : 2);
+  };
+
   const ChangeIndicator = ({ value }: { value?: number }) => {
     if (typeof value !== "number") return null;
     const isPositive = value >= 0;
     const Arrow = isPositive ? ArrowUp : ArrowDown;
     const color = isPositive ? "text-green-400" : "text-red-400";
     return (
-      <span className={`flex items-center gap-1 text-sm font-semibold ${color}`}>
+      <div className={`flex items-center justify-end gap-1 text-sm font-semibold ${color}`}>
         <Arrow size={12} />
         {Math.abs(value).toFixed(2)}%
-      </span>
+      </div>
     );
   };
 
@@ -89,7 +93,6 @@ export default function Home() {
       </Head>
       <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-4 font-inter">
         <div className="space-y-4">
-          {/* Рамка */}
           <div
             ref={ref}
             className="rounded-3xl border border-[#00d2ff]/10 bg-[#0a0f1c] w-[1080px] h-[580px] px-6 py-4"
@@ -98,12 +101,12 @@ export default function Home() {
               <div className="text-white text-xl">Загрузка...</div>
             ) : (
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 h-full">
-                {/* Левая колонка */}
+                {/* Левая колонка: BTC, ETH, SOL */}
                 <Card>
                   <IconWithLabel symbol="BTC" />
                   <div className="text-right">
                     <p className="text-white text-xl font-black">
-                      ${rates.btc.toLocaleString()}
+                      ${formatValue(rates.btc)}
                     </p>
                     <ChangeIndicator value={rates.changes.btc} />
                   </div>
@@ -112,7 +115,7 @@ export default function Home() {
                   <IconWithLabel symbol="ETH" />
                   <div className="text-right">
                     <p className="text-white text-xl font-black">
-                      ${rates.eth.toLocaleString()}
+                      ${formatValue(rates.eth)}
                     </p>
                     <ChangeIndicator value={rates.changes.eth} />
                   </div>
@@ -121,25 +124,29 @@ export default function Home() {
                   <IconWithLabel symbol="SOL" />
                   <div className="text-right">
                     <p className="text-white text-xl font-black">
-                      ${rates.sol.toLocaleString()}
+                      ${formatValue(rates.sol)}
                     </p>
                     <ChangeIndicator value={rates.changes.sol} />
                   </div>
                 </Card>
 
-                {/* Правая колонка */}
-                <Card>
-                  <IconWithLabel symbol="TON" />
-                  <div className="text-right">
-                    <p className="text-white text-xl font-black">${rates.ton.toFixed(2)}</p>
-                    <ChangeIndicator value={rates.changes.ton} />
-                  </div>
-                </Card>
+                {/* Правая колонка: NOT, TON, DATE */}
                 <Card>
                   <IconWithLabel symbol="NOT" />
                   <div className="text-right">
-                    <p className="text-white text-xl font-black">${rates.not.toFixed(4)}</p>
+                    <p className="text-white text-xl font-black">
+                      ${formatValue(rates.not)}
+                    </p>
                     <ChangeIndicator value={rates.changes.not} />
+                  </div>
+                </Card>
+                <Card>
+                  <IconWithLabel symbol="TON" />
+                  <div className="text-right">
+                    <p className="text-white text-xl font-black">
+                      ${formatValue(rates.ton)}
+                    </p>
+                    <ChangeIndicator value={rates.changes.ton} />
                   </div>
                 </Card>
                 <Card highlight>
@@ -153,7 +160,6 @@ export default function Home() {
             )}
           </div>
 
-          {/* Кнопка */}
           <button
             onClick={handleDownload}
             className="bg-white hover:bg-gray-100 px-6 py-3 rounded-xl text-black font-bold text-lg w-full"
