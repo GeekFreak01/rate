@@ -2,8 +2,8 @@
 
 import { useEffect, useState, useRef } from "react";
 import html2canvas from "html2canvas";
-import { ArrowDown, ArrowUp } from "lucide-react";
-import Head from "next/head";
+import { ArrowDown, ArrowUp, CalendarDays } from "lucide-react";
+import "@fontsource/inter/900.css";
 
 interface Rates {
   btc: number;
@@ -27,11 +27,11 @@ export default function Home() {
 
   useEffect(() => {
     const today = new Date();
-    const formatted = `${today.getDate()} ${today.toLocaleString("en", {
+    const formattedDate = today.toLocaleDateString("en-GB", {
+      day: "numeric",
       month: "long",
-    })}`;
-    setDate(formatted);
-
+    });
+    setDate(formattedDate);
     fetch("/api/crypto")
       .then((res) => res.json())
       .then((data) => setRates(data))
@@ -47,89 +47,99 @@ export default function Home() {
     link.click();
   };
 
+  const formatValue = (value: number) => {
+    if (value >= 100) return Math.round(value).toLocaleString();
+    return value.toFixed(2);
+  };
+
   const ChangeIndicator = ({ value }: { value?: number }) => {
     if (typeof value !== "number") return null;
     const isPositive = value >= 0;
     const Arrow = isPositive ? ArrowUp : ArrowDown;
     const color = isPositive ? "text-green-400" : "text-red-400";
     return (
-      <div className={`flex items-center justify-end gap-1 ${color} text-base font-bold`}>
+      <div className={`flex items-center gap-1 text-sm font-bold ${color}`}>
         <Arrow size={14} />
         {Math.abs(value).toFixed(2)}%
       </div>
     );
   };
 
-  const IconWithLabel = ({ src, alt }: { src: string; alt: string }) => (
-    <div className="flex items-center gap-4">
-      <img src={src} alt={alt} className="w-10 h-10" />
-      <span className="text-white text-2xl font-extrabold">{alt}</span>
+  const Card = ({
+    icon,
+    label,
+    value,
+    change,
+    isDate = false,
+  }: {
+    icon?: JSX.Element;
+    label: string;
+    value?: string;
+    change?: number;
+    isDate?: boolean;
+  }) => (
+    <div className="bg-[#012631] rounded-xl p-6 flex items-center justify-between h-full w-full">
+      <div className="flex items-center gap-3">
+        {icon}
+        <span className="text-white text-2xl font-black">{label}</span>
+      </div>
+      {!isDate && value && (
+        <div className="flex flex-col items-end text-white">
+          <span className="text-2xl font-black">${value}</span>
+          <ChangeIndicator value={change} />
+        </div>
+      )}
     </div>
   );
 
-  const formatPrice = (value: number, symbol: string) => {
-    if (value >= 100) return `$${Math.round(value).toLocaleString()}`;
-    return `$${value.toFixed(symbol === "NOT" ? 4 : 2)}`;
-  };
-
   return (
-    <>
-      <Head>
-        <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap"
-          as="style"
+    <main className="min-h-screen bg-[#0a0f1c] flex flex-col items-center justify-center p-4 font-inter">
+      <div
+        ref={ref}
+        className="grid grid-cols-2 gap-4 bg-[#0a0f1c] rounded-3xl w-[1080px] h-[580px] p-6"
+      >
+        <Card
+          icon={<img src="/icons/btc.svg" alt="BTC" className="w-10 h-10" />}
+          label="BTC"
+          value={rates ? formatValue(rates.btc) : undefined}
+          change={rates?.changes.btc}
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap"
-          rel="stylesheet"
+        <Card
+          icon={<img src="/icons/ton.svg" alt="TON" className="w-10 h-10" />}
+          label="TON"
+          value={rates ? formatValue(rates.ton) : undefined}
+          change={rates?.changes.ton}
         />
-      </Head>
-
-      <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-4 font-inter">
-        <div className="w-[1080px] h-[580px] bg-[#0a0f1c] p-6 rounded-3xl" ref={ref}>
-          {!rates ? (
-            <div className="text-white text-center text-xl mt-20">Загрузка данных...</div>
-          ) : (
-            <div className="grid grid-cols-2 gap-4 h-full">
-              {[
-                { symbol: "BTC", value: rates.btc, change: rates.changes.btc },
-                { symbol: "TON", value: rates.ton, change: rates.changes.ton },
-                { symbol: "ETH", value: rates.eth, change: rates.changes.eth },
-                { symbol: "NOT", value: rates.not, change: rates.changes.not },
-                { symbol: "SOL", value: rates.sol, change: rates.changes.sol },
-              ].map(({ symbol, value, change }, idx) => (
-                <div
-                  key={symbol}
-                  className="flex flex-col justify-center bg-[#002733] px-6 py-4 rounded-xl"
-                >
-                  <div className="flex items-center justify-between">
-                    <IconWithLabel src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} />
-                    <div className="text-white text-2xl font-extrabold text-right">
-                      {formatPrice(value, symbol)}
-                    </div>
-                  </div>
-                  <ChangeIndicator value={change} />
-                </div>
-              ))}
-
-              {/* Date Block */}
-              <div className="flex flex-col justify-center bg-[#003840] px-6 py-4 rounded-xl">
-                <div className="flex items-center gap-4">
-                  <img src="/icons/calendar.svg" alt="calendar" className="w-10 h-10" />
-                  <span className="text-white text-2xl font-extrabold">{date}</span>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-        <button
-          onClick={handleDownload}
-          className="text-white border mt-4 px-6 py-2 rounded-md border-white hover:bg-white hover:text-black transition"
-        >
-          Скачать изображение
-        </button>
-      </main>
-    </>
+        <Card
+          icon={<img src="/icons/eth.svg" alt="ETH" className="w-10 h-10" />}
+          label="ETH"
+          value={rates ? formatValue(rates.eth) : undefined}
+          change={rates?.changes.eth}
+        />
+        <Card
+          icon={<img src="/icons/not.svg" alt="NOT" className="w-10 h-10" />}
+          label="NOT"
+          value={rates ? formatValue(rates.not) : undefined}
+          change={rates?.changes.not}
+        />
+        <Card
+          icon={<img src="/icons/sol.svg" alt="SOL" className="w-10 h-10" />}
+          label="SOL"
+          value={rates ? formatValue(rates.sol) : undefined}
+          change={rates?.changes.sol}
+        />
+        <Card
+          icon={<CalendarDays size={32} className="text-cyan-400" />}
+          label={date}
+          isDate
+        />
+      </div>
+      <button
+        onClick={handleDownload}
+        className="mt-4 bg-white text-black px-6 py-2 rounded-xl font-bold hover:bg-gray-200 transition"
+      >
+        Скачать изображение
+      </button>
+    </main>
   );
 }
