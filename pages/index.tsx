@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import html2canvas from "html2canvas";
-import { Button } from "../components/ui/button";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import "@fontsource/inter/900.css";
 import Head from "next/head";
@@ -10,15 +9,15 @@ import Head from "next/head";
 interface Rates {
   btc: number;
   eth: number;
+  sol: number;
   ton: number;
   not: number;
-  sol: number;
   changes: {
     btc?: number;
     eth?: number;
+    sol?: number;
     ton?: number;
     not?: number;
-    sol?: number;
   };
 }
 
@@ -30,7 +29,7 @@ export default function Home() {
   useEffect(() => {
     const today = new Date();
     const day = today.getDate();
-    const month = today.toLocaleString("en-US", { month: "long" });
+    const month = today.toLocaleDateString("en-US", { month: "long" });
     setDate(`${day} ${month}`);
     fetch("/api/crypto")
       .then((res) => res.json())
@@ -40,9 +39,7 @@ export default function Home() {
 
   const handleDownload = async () => {
     if (!ref.current) return;
-    const canvas = await html2canvas(ref.current, {
-      useCORS: true,
-    });
+    const canvas = await html2canvas(ref.current);
     const link = document.createElement("a");
     link.download = `курс_${date}.png`;
     link.href = canvas.toDataURL("image/png");
@@ -50,106 +47,120 @@ export default function Home() {
   };
 
   const ChangeIndicator = ({ value }: { value?: number }) => {
-    if (typeof value !== "number") return <span>—</span>;
+    if (typeof value !== "number") return null;
     const isPositive = value >= 0;
     const Arrow = isPositive ? ArrowUp : ArrowDown;
     const color = isPositive ? "text-green-400" : "text-red-400";
     return (
-      <span className={`flex items-center gap-1 text-xl ${color}`}>
-        <Arrow size={20} />
+      <span className={`flex items-center gap-1 text-sm font-semibold ${color}`}>
+        <Arrow size={12} />
         {Math.abs(value).toFixed(2)}%
       </span>
     );
   };
 
-  const formatValue = (symbol: string, value: number): string => {
-    if (symbol === "NOT") return value.toFixed(4);
-    return value > 100 ? Math.round(value).toString() : value.toFixed(2);
-  };
-
-  const IconWithLabel = ({ symbol }: { symbol: string }) => (
-    <div className="flex items-center gap-4">
-      <img
-        src={`/icons/${symbol.toLowerCase()}.svg`}
-        alt={symbol}
-        className="w-20 h-20"
-      />
-      <span className="uppercase font-black text-4xl text-white">{symbol}</span>
+  const Card = ({
+    children,
+    highlight,
+  }: {
+    children: React.ReactNode;
+    highlight?: boolean;
+  }) => (
+    <div
+      className={`rounded-xl px-6 py-4 flex items-center justify-between ${
+        highlight ? "bg-[#00f0ff20]" : "bg-[#03202e]"
+      }`}
+    >
+      {children}
     </div>
   );
 
-  const renderCard = (
-    symbol: string,
-    value?: number,
-    change?: number,
-    isDate = false
-  ) => (
-    <div
-      key={symbol}
-      className={`${
-        isDate ? "bg-[#00f0ff20]" : "bg-[#00d2ff20]"
-      } border border-[#00f0ff40] backdrop-blur-sm flex flex-col justify-center px-6 py-4 rounded-xl w-[470px] h-[150px]`}
-    >
-      {isDate ? (
-        <div className="flex items-center justify-between w-full h-full">
-          <div className="flex items-center gap-4">
-            <img src="/icons/calendar.svg" alt="calendar" className="w-16 h-16" />
-            <span className="text-white text-5xl font-black">{date}</span>
-          </div>
-        </div>
-      ) : (
-        <div className="flex items-center justify-between w-full">
-          <IconWithLabel symbol={symbol} />
-          <div className="flex flex-col items-end text-white gap-2 leading-tight">
-            <span className="text-4xl font-black">${formatValue(symbol, value!)}</span>
-            <ChangeIndicator value={change} />
-          </div>
-        </div>
-      )}
+  const IconWithLabel = ({ symbol }: { symbol: string }) => (
+    <div className="flex items-center gap-3">
+      <img src={`/icons/${symbol.toLowerCase()}.svg`} alt={symbol} className="w-10 h-10" />
+      <span className="text-white text-2xl font-black">{symbol}</span>
     </div>
   );
 
   return (
     <>
       <Head>
-        <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap"
-          as="style"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap"
-          rel="stylesheet"
-        />
+        <title>Курс криптовалют</title>
       </Head>
-
       <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-4 font-inter">
         <div className="space-y-4">
-          <div className="relative" style={{ width: 980, height: 980 }}>
-            <div
-              ref={ref}
-              className="rounded-3xl border border-[#00d2ff]/10 bg-[#0a0f1c] w-full h-full p-6"
-            >
-              {!rates ? (
-                <div className="text-white text-xl text-center mt-40">
-                  Загрузка данных...
+          <div
+            ref={ref}
+            className="rounded-3xl border border-[#00d2ff]/10 bg-[#0a0f1c] w-[1080px] h-[580px] px-6 py-4 grid grid-cols-2 gap-4"
+          >
+            {!rates ? (
+              <div className="text-white text-xl">Загрузка...</div>
+            ) : (
+              <>
+                {/* Левый столбец */}
+                <div className="flex flex-col gap-4">
+                  <Card>
+                    <IconWithLabel symbol="BTC" />
+                    <div className="text-right">
+                      <p className="text-white text-xl font-black">
+                        ${rates.btc.toLocaleString()}
+                      </p>
+                      <ChangeIndicator value={rates.changes.btc} />
+                    </div>
+                  </Card>
+                  <Card>
+                    <IconWithLabel symbol="ETH" />
+                    <div className="text-right">
+                      <p className="text-white text-xl font-black">
+                        ${rates.eth.toLocaleString()}
+                      </p>
+                      <ChangeIndicator value={rates.changes.eth} />
+                    </div>
+                  </Card>
+                  <Card>
+                    <IconWithLabel symbol="SOL" />
+                    <div className="text-right">
+                      <p className="text-white text-xl font-black">
+                        ${rates.sol.toLocaleString()}
+                      </p>
+                      <ChangeIndicator value={rates.changes.sol} />
+                    </div>
+                  </Card>
                 </div>
-              ) : (
-                <div className="grid grid-cols-2 gap-x-6 gap-y-6">
-                  {renderCard("BTC", rates.btc, rates.changes.btc)}
-                  {renderCard("TON", rates.ton, rates.changes.ton)}
-                  {renderCard("ETH", rates.eth, rates.changes.eth)}
-                  {renderCard("NOT", rates.not, rates.changes.not)}
-                  {renderCard("SOL", rates.sol, rates.changes.sol)}
-                  {renderCard("Дата", undefined, undefined, true)}
-                </div>
-              )}
-            </div>
-          </div>
 
-          <Button onClick={handleDownload} className="w-full hover:brightness-110 transition">
+                {/* Правый столбец */}
+                <div className="flex flex-col gap-4">
+                  <Card>
+                    <IconWithLabel symbol="TON" />
+                    <div className="text-right">
+                      <p className="text-white text-xl font-black">${rates.ton.toFixed(2)}</p>
+                      <ChangeIndicator value={rates.changes.ton} />
+                    </div>
+                  </Card>
+                  <Card>
+                    <IconWithLabel symbol="NOT" />
+                    <div className="text-right">
+                      <p className="text-white text-xl font-black">${rates.not.toFixed(4)}</p>
+                      <ChangeIndicator value={rates.changes.not} />
+                    </div>
+                  </Card>
+                  <Card highlight>
+                    <div className="flex items-center gap-3">
+                      <img src="/icons/calendar.svg" className="w-8 h-8" alt="calendar" />
+                      <span className="text-white text-2xl font-black">{date}</span>
+                    </div>
+                    <span />
+                  </Card>
+                </div>
+              </>
+            )}
+          </div>
+          <button
+            onClick={handleDownload}
+            className="bg-white hover:bg-gray-100 px-6 py-3 rounded-xl text-black font-bold text-lg w-full"
+          >
             Скачать изображение
-          </Button>
+          </button>
         </div>
       </main>
     </>
