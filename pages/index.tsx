@@ -76,6 +76,30 @@ export default function Home() {
     </div>
   );
 
+  const renderCard = (
+    symbol: string,
+    value?: number,
+    change?: number,
+    isDate = false
+  ) => (
+    <div
+      key={symbol}
+      className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex flex-col justify-center px-6 py-4 rounded-xl w-[500px] h-[160px]"
+    >
+      {isDate ? (
+        <span className="text-white text-4xl font-black">{value}</span>
+      ) : (
+        <div className="flex items-center justify-between w-full">
+          <IconWithLabel symbol={symbol} />
+          <div className="flex flex-col items-end text-white gap-2 leading-tight">
+            <span className="text-4xl font-black">${formatValue(symbol, value!)}</span>
+            <ChangeIndicator value={change} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <>
       <Head>
@@ -92,53 +116,30 @@ export default function Home() {
 
       <main className="min-h-screen bg-[#0a0f1c] flex items-center justify-center p-4 font-inter">
         <div className="space-y-4">
-          {/* Внешняя оболочка (не попадает в canvas) */}
+          {/* Внешняя оболочка */}
           <div className="relative" style={{ width: 1080, height: 1080 }}>
             {/* Сам canvas */}
             <div
               ref={ref}
-              className="rounded-3xl border border-[#00d2ff]/10 bg-[#0a0f1c] w-full h-full"
+              className="rounded-3xl border border-[#00d2ff]/10 bg-[#0a0f1c] w-full h-full p-6"
             >
               {!rates ? (
                 <div className="text-white text-xl text-center mt-40">Загрузка данных...</div>
               ) : (
-                <div className="flex flex-col justify-between h-full p-6 pt-24 relative gap-4">
-                  {/* Дата */}
-                  <div className="absolute top-10 left-6 text-white text-4xl font-black">
-                    {date}
-                  </div>
-
-                  {/* Карточки */}
-                  {[
-                    { symbol: "BTC", value: rates.btc, change: rates.changes.btc },
-                    { symbol: "ETH", value: rates.eth, change: rates.changes.eth },
-                    { symbol: "TON", value: rates.ton, change: rates.changes.ton },
-                    { symbol: "NOT", value: rates.not, change: rates.changes.not },
-                    { symbol: "SOL", value: rates.sol, change: rates.changes.sol },
-                  ].map(({ symbol, value, change }) => (
-                    <div
-                      key={symbol}
-                      style={{ height: 190 }}
-                      className="bg-[#00d2ff20] border border-[#00f0ff40] backdrop-blur-sm flex items-center justify-between px-6 py-4 rounded-xl"
-                    >
-                      <IconWithLabel symbol={symbol} />
-                      <div className="flex flex-col items-end text-white leading-tight gap-2">
-                        <span className="text-4xl font-black">
-                          ${formatValue(symbol, value)}
-                        </span>
-                        <ChangeIndicator value={change} />
-                      </div>
-                    </div>
-                  ))}
-
-                  {/* Водяной знак */}
-                  <div className="text-center text-white/40 text-lg pt-2 font-bold">peeton</div>
+                <div className="grid grid-cols-2 gap-x-6 gap-y-6">
+                  {/* Левый столбец */}
+                  {renderCard("BTC", rates.btc, rates.changes.btc)}
+                  {renderCard("TON", rates.ton, rates.changes.ton)}
+                  {renderCard("ETH", rates.eth, rates.changes.eth)}
+                  {renderCard("NOT", rates.not, rates.changes.not)}
+                  {renderCard("SOL", rates.sol, rates.changes.sol)}
+                  {renderCard("Дата", undefined, undefined, true)}
                 </div>
               )}
             </div>
           </div>
 
-          {/* Кнопка скачивания */}
+          {/* Кнопка */}
           <Button onClick={handleDownload} className="w-full hover:brightness-110 transition">
             Скачать изображение
           </Button>
