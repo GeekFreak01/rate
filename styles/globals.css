@@ -6,7 +6,7 @@
 body {
   font-family: 'Inter', sans-serif;
   background-color: #0a0f1c;
-  color: #0f172a;
+  color: #ffffff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -25,7 +25,12 @@ img {
   display: inline-block;
 }
 
-/* Плавность для кнопок и стрелок */
+/* Плавность для интерактивных элементов */
 button, a, span, svg {
   transition: all 0.2s ease-in-out;
+}
+
+/* Tailwind контейнер для центрирования */
+.container {
+  @apply mx-auto px-4;
 }
