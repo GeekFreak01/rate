@@ -89,8 +89,11 @@ const Card = ({
             change={c.change}
           />
         ))}
-        <Card icon={<CalendarDays size={32} className="text-cyan-400" />} label={date} isDate />
-      </div>
+        <Card 
+          icon={<CalendarDays size={48} className="text-cyan-400" />} 
+          label={date} 
+          isDate 
+        />
       <button
         onClick={handleDownload}
         className="mt-4 bg-white text-black px-6 py-2 rounded-xl font-bold hover:bg-gray-200 transition"
