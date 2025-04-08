@@ -23,22 +23,7 @@ export default function Home() {
 
     fetch('/api/crypto')
       .then((res) => res.json())
-      .then(async (data) => {
-        const loadedCryptos = await Promise.all(
-          data.cryptos.map(async (crypto: Crypto) => {
-            const logoResponse = await fetch(crypto.logo);
-            const logoBlob = await logoResponse.blob();
-            const logoBase64 = await new Promise<string>((resolve) => {
-              const reader = new FileReader();
-              reader.onloadend = () => resolve(reader.result as string);
-              reader.readAsDataURL(logoBlob);
-            });
-
-            return { ...crypto, logo: logoBase64 };
-          })
-        );
-        setCryptos(loadedCryptos);
-      })
+      .then((data) => setCryptos(data.cryptos))
       .catch(console.error);
   }, []);
 
@@ -51,8 +36,9 @@ export default function Home() {
     link.click();
   };
 
+  // Форматирование с условием для "NOT"
   const formatValue = (value: number, symbol: string) => {
-    if (symbol === 'NOT') return value.toString();
+    if (symbol === 'NOT') return value.toFixed(4);
     return value >= 100 ? Math.round(value).toLocaleString() : value.toFixed(2);
   };
 
@@ -104,9 +90,11 @@ export default function Home() {
         {cryptos.map((c) => (
           <Card
             key={c.symbol}
-            icon={<img src={c.logo} alt={c.symbol} className="w-full h-full object-contain" />}
+            icon={
+              <img src={c.logo} alt={c.symbol} className="w-full h-full object-contain" />
+            }
             label={c.symbol}
-            value={formatValue(c.price, c.symbol)}
+            value={formatValue(c.price, c.symbol)} // ← тут адаптация
             change={c.change}
           />
         ))}
