@@ -50,19 +50,19 @@ export default function Home() {
     );
   };
 
-const Card = ({
-  icon,
-  label,
-  value,
-  change,
-  isDate = false,
-}: {
-  icon?: JSX.Element;
-  label: string;
-  value?: string;
-  change?: number;
-  isDate?: boolean;
-}) => (
+  const Card = ({
+    icon,
+    label,
+    value,
+    change,
+    isDate = false,
+  }: {
+    icon?: JSX.Element;
+    label: string;
+    value?: string;
+    change?: number;
+    isDate?: boolean;
+  }) => (
   <div className="bg-[#012631] rounded-xl p-6 flex items-center justify-between h-full w-full">
     <div className="flex items-center gap-4">
       {icon && React.cloneElement(icon, { className: "w-14 h-14 object-contain" })}
