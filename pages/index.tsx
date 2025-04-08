@@ -43,8 +43,8 @@ export default function Home() {
     const Arrow = isPositive ? ArrowUp : ArrowDown;
     const color = isPositive ? 'text-green-400' : 'text-red-400';
     return (
-      <div className={`flex items-center gap-1 text-lg font-bold ${color}`}>
-        <Arrow size={20} />
+      <div className={`flex items-center gap-1 text-sm font-bold ${color}`}>
+        <Arrow size={14} />
         {Math.abs(value).toFixed(2)}%
       </div>
     );
@@ -63,19 +63,19 @@ export default function Home() {
     change?: number;
     isDate?: boolean;
   }) => (
-  <div className="bg-[#012631] rounded-xl p-6 flex items-center justify-between h-full w-full">
-    <div className="flex items-center gap-4">
-      {icon && React.cloneElement(icon, { className: "w-14 h-14 object-contain" })}
-      <span className="text-white text-[2.25rem] font-black">{label}</span>
-    </div>
-    {!isDate && value && (
-      <div className="flex flex-col items-end text-white">
-        <span className="text-[2.25rem] font-black">${value}</span>
-        <ChangeIndicator value={change ?? 0} />
+    <div className="bg-[#012631] rounded-xl p-6 flex items-center justify-between h-full w-full">
+      <div className="flex items-center gap-3">
+        {icon}
+        <span className="text-white text-2xl font-black">{label}</span>
       </div>
-    )}
-  </div>
-);
+      {!isDate && value && (
+        <div className="flex flex-col items-end text-white">
+          <span className="text-2xl font-black">${value}</span>
+          <ChangeIndicator value={change ?? 0} />
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <main className="min-h-screen bg-[#0a0f1c] flex flex-col items-center justify-center p-4 font-inter">
@@ -89,11 +89,8 @@ export default function Home() {
             change={c.change}
           />
         ))}
-        <Card 
-          icon={<CalendarDays size={48} className="text-cyan-400" />} 
-          label={date} 
-          isDate 
-        />
+        <Card icon={<CalendarDays size={32} className="text-cyan-400" />} label={date} isDate />
+      </div>
       <button
         onClick={handleDownload}
         className="mt-4 bg-white text-black px-6 py-2 rounded-xl font-bold hover:bg-gray-200 transition"
