@@ -12,12 +12,13 @@ interface Crypto {
   symbol: string;
   price: number;
   change: number;
-  logo: string; // base64
+  logo: string;
 }
 
 export default function Home() {
   const [cryptos, setCryptos] = useState<Crypto[]>([]);
   const [date, setDate] = useState("");
+  const [loading, setLoading] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -45,11 +46,11 @@ export default function Home() {
         const prices = await priceRes.json();
         const info = await infoRes.json();
 
-        const withLogos: Crypto[] = await Promise.all(
+        const cryptosData: Crypto[] = await Promise.all(
           SYMBOLS.map(async (sym) => {
             const price = prices.data[sym]?.quote?.USD?.price || 0;
             const change = prices.data[sym]?.quote?.USD?.percent_change_24h || 0;
-            const logoUrl = info.data[sym]?.logo;
+            const logoUrl = info.data[sym]?.logo || "";
 
             const logoBlob = await fetch(logoUrl).then((r) => r.blob());
             const logoBase64 = await new Promise<string>((resolve) => {
@@ -67,9 +68,11 @@ export default function Home() {
           })
         );
 
-        setCryptos(withLogos);
-      } catch (err) {
-        console.error("Ошибка загрузки данных:", err);
+        setCryptos(cryptosData);
+      } catch (error) {
+        console.error("Ошибка загрузки:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -115,14 +118,14 @@ export default function Home() {
     change?: number;
     isDate?: boolean;
   }) => (
-    <div className="bg-[#012631] rounded-xl p-6 flex items-center justify-between h-full w-full">
+    <div className={`bg-[#012631] rounded-xl p-6 flex items-center justify-between`}>
       <div className="flex items-center gap-3">
         {icon}
-        <span className="text-white text-2xl font-black">{label}</span>
+        <span className="text-white text-3xl font-black">{label}</span>
       </div>
       {!isDate && value && (
         <div className="flex flex-col items-end text-white">
-          <span className="text-2xl font-black">${value}</span>
+          <span className="text-3xl font-black">${value}</span>
           <ChangeIndicator value={change ?? 0} />
         </div>
       )}
@@ -135,27 +138,47 @@ export default function Home() {
         ref={ref}
         className="grid grid-cols-2 gap-4 bg-[#0a0f1c] rounded-3xl w-[1080px] h-[580px] p-6"
       >
-        {cryptos.map((c) => (
-          <Card
-            key={c.symbol}
-            icon={
-              <img
-                src={c.logo}
-                alt={c.symbol}
-                className="w-10 h-10 object-contain"
-              />
-            }
-            label={c.symbol}
-            value={formatValue(c.price)}
-            change={c.change}
-          />
-        ))}
-
-        <Card
-          icon={<CalendarDays size={32} className="text-cyan-400" />}
-          label={date}
-          isDate
-        />
+        {loading ? (
+          <div className="text-white text-xl">Загрузка...</div>
+        ) : (
+          <>
+            <Card
+              icon={<img src={cryptos[0].logo} className="w-12 h-12" />}
+              label={cryptos[0].symbol}
+              value={formatValue(cryptos[0].price)}
+              change={cryptos[0].change}
+            />
+            <Card
+              icon={<img src={cryptos[2].logo} className="w-12 h-12" />}
+              label={cryptos[2].symbol}
+              value={formatValue(cryptos[2].price)}
+              change={cryptos[2].change}
+            />
+            <Card
+              icon={<img src={cryptos[1].logo} className="w-12 h-12" />}
+              label={cryptos[1].symbol}
+              value={formatValue(cryptos[1].price)}
+              change={cryptos[1].change}
+            />
+            <Card
+              icon={<img src={cryptos[3].logo} className="w-12 h-12" />}
+              label={cryptos[3].symbol}
+              value={formatValue(cryptos[3].price)}
+              change={cryptos[3].change}
+            />
+            <Card
+              icon={<img src={cryptos[4].logo} className="w-12 h-12" />}
+              label={cryptos[4].symbol}
+              value={formatValue(cryptos[4].price)}
+              change={cryptos[4].change}
+            />
+            <Card
+              icon={<CalendarDays size={32} className="text-cyan-400" />}
+              label={date}
+              isDate
+            />
+          </>
+        )}
       </div>
 
       <button
