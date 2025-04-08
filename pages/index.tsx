@@ -1,103 +1,47 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState, useRef } from "react";
-import html2canvas from "html2canvas";
-import { CalendarDays, ArrowUp, ArrowDown } from "lucide-react";
-import "@fontsource/inter/900.css";
-
-const CMC_API_KEY = "f98cc435-c24c-4084-869b-b798beb262f9";
-const SYMBOLS = ["BTC", "TON", "ETH", "NOT", "SOL"];
+import { useEffect, useState, useRef } from 'react';
+import html2canvas from 'html2canvas';
+import { ArrowDown, ArrowUp, CalendarDays } from 'lucide-react';
+import '@fontsource/inter/900.css';
 
 interface Crypto {
   symbol: string;
   price: number;
   change: number;
-  logo: string; // base64
+  logo: string;
 }
 
 export default function Home() {
   const [cryptos, setCryptos] = useState<Crypto[]>([]);
-  const [date, setDate] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [date, setDate] = useState('');
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const today = new Date();
-    setDate(
-      today.toLocaleDateString("ru-RU", {
-        day: "2-digit",
-        month: "long",
-      })
-    );
+    setDate(today.toLocaleDateString('ru-RU', { day: '2-digit', month: 'long' }));
 
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [priceRes, infoRes] = await Promise.all([
-          fetch(
-            `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${SYMBOLS.join(",")}`,
-            { headers: { "X-CMC_PRO_API_KEY": CMC_API_KEY } }
-          ),
-          fetch(
-            `https://pro-api.coinmarketcap.com/v1/cryptocurrency/info?symbol=${SYMBOLS.join(",")}`,
-            { headers: { "X-CMC_PRO_API_KEY": CMC_API_KEY } }
-          ),
-        ]);
-
-        const prices = await priceRes.json();
-        const info = await infoRes.json();
-
-        const withLogos: Crypto[] = await Promise.all(
-          SYMBOLS.map(async (sym) => {
-            const price = prices.data[sym]?.quote?.USD?.price || 0;
-            const change = prices.data[sym]?.quote?.USD?.percent_change_24h || 0;
-            const logoUrl = info.data[sym]?.logo;
-
-            const logoBlob = await fetch(logoUrl).then((r) => r.blob());
-            const logoBase64 = await new Promise<string>((resolve) => {
-              const reader = new FileReader();
-              reader.onloadend = () => resolve(reader.result as string);
-              reader.readAsDataURL(logoBlob);
-            });
-
-            return {
-              symbol: sym,
-              price,
-              change,
-              logo: logoBase64,
-            };
-          })
-        );
-
-        setCryptos(withLogos);
-      } catch (err) {
-        console.error("Ошибка загрузки данных:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    fetch('/api/crypto')
+      .then((res) => res.json())
+      .then((data) => setCryptos(data.cryptos))
+      .catch(console.error);
   }, []);
-
-  const formatValue = (value: number) => {
-    if (value >= 100) return Math.round(value).toLocaleString();
-    return value.toFixed(4);
-  };
 
   const handleDownload = async () => {
     if (!ref.current) return;
     const canvas = await html2canvas(ref.current, { useCORS: true });
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.download = `курс_${date}.png`;
-    link.href = canvas.toDataURL("image/png");
+    link.href = canvas.toDataURL('image/png');
     link.click();
   };
+
+  const formatValue = (value: number) => (value >= 100 ? Math.round(value).toLocaleString() : value.toFixed(2));
 
   const ChangeIndicator = ({ value }: { value: number }) => {
     const isPositive = value >= 0;
     const Arrow = isPositive ? ArrowUp : ArrowDown;
-    const color = isPositive ? "text-green-400" : "text-red-400";
+    const color = isPositive ? 'text-green-400' : 'text-red-400';
     return (
       <div className={`flex items-center gap-1 text-sm font-bold ${color}`}>
         <Arrow size={14} />
@@ -135,38 +79,18 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#0a0f1c] flex flex-col items-center justify-center p-4 font-inter">
-      <div
-        ref={ref}
-        className="grid grid-cols-2 gap-4 bg-[#0a0f1c] rounded-3xl w-[1080px] h-[580px] p-6"
-      >
-        {loading ? (
-          <div className="text-white text-xl">Загрузка...</div>
-        ) : (
-          <>
-            {cryptos.slice(0, 5).map((c) => (
-              <Card
-                key={c.symbol}
-                icon={
-                  <img
-                    src={c.logo}
-                    alt={c.symbol}
-                    className="w-10 h-10 object-contain"
-                  />
-                }
-                label={c.symbol}
-                value={formatValue(c.price)}
-                change={c.change}
-              />
-            ))}
-            <Card
-              icon={<CalendarDays size={32} className="text-cyan-400" />}
-              label={date}
-              isDate
-            />
-          </>
-        )}
+      <div ref={ref} className="grid grid-cols-2 gap-4 bg-[#0a0f1c] rounded-3xl w-[1080px] h-[580px] p-6">
+        {cryptos.map((c) => (
+          <Card
+            key={c.symbol}
+            icon={<img src={c.logo} alt={c.symbol} className="w-10 h-10 object-contain" />}
+            label={c.symbol}
+            value={formatValue(c.price)}
+            change={c.change}
+          />
+        ))}
+        <Card icon={<CalendarDays size={32} className="text-cyan-400" />} label={date} isDate />
       </div>
-
       <button
         onClick={handleDownload}
         className="mt-4 bg-white text-black px-6 py-2 rounded-xl font-bold hover:bg-gray-200 transition"
