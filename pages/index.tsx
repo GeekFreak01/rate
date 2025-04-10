@@ -84,7 +84,7 @@ export default function Home() {
     <main className="min-h-screen bg-rich-black flex flex-col items-center justify-center p-4 font-inter">
       <div
         ref={ref}
-        className="grid grid-cols-2 gap-4 bg-rich-black rounded-3xl w-[1080px] h-[580px] p-6"
+        className="grid grid-cols-2 gap-4 bg-rich-black w-[1080px] h-[580px] p-6"
       >
         {cryptos.map((c) => (
           <Card
