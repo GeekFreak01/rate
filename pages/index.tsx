@@ -44,7 +44,7 @@ export default function Home() {
   const ChangeIndicator = ({ value }: { value: number }) => {
     const isPositive = value >= 0;
     const Arrow = isPositive ? ArrowUp : ArrowDown;
-    const color = isPositive ? 'text-[#00DF81]' : 'text-[#778D19]';
+    const color = isPositive ? 'text-caribbean' : 'text-red-400';
     return (
       <div className={`flex items-center gap-1 text-lg font-bold ${color}`}>
         <Arrow size={20} />
@@ -66,13 +66,13 @@ export default function Home() {
     change?: number;
     isDate?: boolean;
   }) => (
-    <div className="bg-[#032221] rounded-xl p-6 flex items-center justify-between h-full w-full">
+    <div className="bg-bangladesh-green rounded-xl p-6 flex items-center justify-between h-full w-full">
       <div className="flex items-center gap-4">
         {icon && <div className="w-14 h-14 flex items-center justify-center">{icon}</div>}
-        <span className="text-[#F1F7F5] text-[2.25rem] font-black">{label}</span>
+        <span className="text-antiflash-white text-[2.25rem] font-black">{label}</span>
       </div>
       {!isDate && value && (
-        <div className="flex flex-col items-end text-[#F1F7F5]">
+        <div className="flex flex-col items-end text-antiflash-white">
           <span className="text-[2.25rem] font-black">${value}</span>
           <ChangeIndicator value={change ?? 0} />
         </div>
@@ -81,16 +81,20 @@ export default function Home() {
   );
 
   return (
-    <main className="min-h-screen bg-[#0D0F1B] flex flex-col items-center justify-center p-4 font-inter">
+    <main className="min-h-screen bg-rich-black flex flex-col items-center justify-center p-4 font-inter">
       <div
         ref={ref}
-        className="grid grid-cols-2 gap-4 bg-[#0D0F1B] rounded-3xl w-[1080px] h-[580px] p-6"
+        className="grid grid-cols-2 gap-4 bg-rich-black rounded-3xl w-[1080px] h-[580px] p-6"
       >
         {cryptos.map((c) => (
           <Card
             key={c.symbol}
             icon={
-              <img src={c.logo} alt={c.symbol} className="w-full h-full object-contain" />
+              <img
+                src={c.logo}
+                alt={c.symbol}
+                className="w-full h-full object-contain"
+              />
             }
             label={c.symbol}
             value={formatValue(c.price, c.symbol)}
@@ -98,14 +102,14 @@ export default function Home() {
           />
         ))}
         <Card
-          icon={<CalendarDays size={48} className="text-[#2CC5A5]" />}
+          icon={<CalendarDays size={48} className="text-caribbean" />}
           label={date}
           isDate
         />
       </div>
       <button
         onClick={handleDownload}
-        className="mt-4 bg-[#2CC5A5] text-[#0D0F1B] px-6 py-2 rounded-xl font-bold hover:brightness-110 transition"
+        className="mt-4 bg-antiflash-white text-rich-black px-6 py-2 rounded-xl font-bold hover:bg-[#dceee9] transition"
       >
         Скачать изображение
       </button>
