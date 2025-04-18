@@ -83,7 +83,7 @@ export default function Home() {
   );
 
   const FooterCard = () => (
-    <div className="bg-[#0b2738] rounded-xl p-6 flex items-start justify-between h-full w-full">
+    <div className="bg-[#0b2738] rounded-xl p-6 flex items-center justify-between h-full w-full">
       <div className="flex items-center gap-4">
         <CalendarDays size={48} className="text-cyan-400" />
         <div className="text-white text-[2.25rem] font-black leading-tight">
