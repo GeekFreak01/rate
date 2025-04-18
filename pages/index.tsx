@@ -19,10 +19,9 @@ export default function Home() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const now = new Date();
-    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long' };
-    setDate(now.toLocaleDateString('ru-RU', options));
-    setTime(now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }));
+    const today = new Date();
+    setDate(today.toLocaleDateString('ru-RU', { day: '2-digit', month: 'long' }));
+    setTime(today.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }));
 
     fetch('/api/crypto')
       .then((res) => res.json())
@@ -69,7 +68,7 @@ export default function Home() {
     change?: number;
     isDate?: boolean;
   }) => (
-    <div className="bg-[#0b2738] p-6 flex items-center justify-between h-full w-full">
+    <div className="bg-[#0b2738] rounded-xl p-6 flex items-center justify-between h-full w-full">
       <div className="flex items-center gap-4">
         {icon && <div className="w-14 h-14 flex items-center justify-center">{icon}</div>}
         <span className="text-white text-[2.25rem] font-black">{label}</span>
@@ -83,11 +82,26 @@ export default function Home() {
     </div>
   );
 
+  const FooterCard = () => (
+    <div className="bg-[#0b2738] rounded-xl p-6 flex items-start justify-between h-full w-full">
+      <div className="flex items-center gap-4">
+        <CalendarDays size={48} className="text-cyan-400" />
+        <div className="text-white text-[2.25rem] font-black leading-tight">
+          {date}
+        </div>
+      </div>
+      <div className="text-right text-white">
+        <div className="text-lg font-semibold text-[#ffffffa0]">Tashkent •</div>
+        <div className="text-lg font-semibold">{time}</div>
+      </div>
+    </div>
+  );
+
   return (
-    <main className="min-h-screen bg-[#000f1c] flex flex-col items-center justify-center p-4 font-inter">
+    <main className="min-h-screen bg-[#010b13] flex flex-col items-center justify-center p-4 font-inter">
       <div
         ref={ref}
-        className="grid grid-cols-2 gap-4 bg-[#000f1c] w-[1080px] h-[580px] p-6"
+        className="grid grid-cols-2 gap-4 bg-[#010b13] w-[1080px] h-[580px] p-6"
       >
         {cryptos.map((c) => (
           <Card
@@ -100,23 +114,8 @@ export default function Home() {
             change={c.change}
           />
         ))}
-        <Card
-          icon={
-            <div className="flex items-center gap-2">
-              <CalendarDays size={48} className="text-[#17c2c7]" />
-              <div className="text-white text-[2.25rem] font-black leading-tight">
-                {date}
-                <div className="text-lg font-medium text-[#ffffffa0]">
-                  Tashkent • {time}
-                </div>
-              </div>
-            </div>
-          }
-          label=""
-          isDate
-        />
+        <FooterCard />
       </div>
-
       <button
         onClick={handleDownload}
         className="mt-4 bg-white text-black px-6 py-2 rounded-xl font-bold hover:bg-gray-200 transition"
