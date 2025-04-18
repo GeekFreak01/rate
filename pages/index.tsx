@@ -15,11 +15,14 @@ interface Crypto {
 export default function Home() {
   const [cryptos, setCryptos] = useState<Crypto[]>([]);
   const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const today = new Date();
-    setDate(today.toLocaleDateString('ru-RU', { day: '2-digit', month: 'long' }));
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long' };
+    setDate(now.toLocaleDateString('ru-RU', options));
+    setTime(now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }));
 
     fetch('/api/crypto')
       .then((res) => res.json())
@@ -44,7 +47,7 @@ export default function Home() {
   const ChangeIndicator = ({ value }: { value: number }) => {
     const isPositive = value >= 0;
     const Arrow = isPositive ? ArrowUp : ArrowDown;
-    const color = isPositive ? 'text-caribbean' : 'text-red-400';
+    const color = isPositive ? 'text-green-400' : 'text-red-400';
     return (
       <div className={`flex items-center gap-1 text-lg font-bold ${color}`}>
         <Arrow size={20} />
@@ -66,13 +69,13 @@ export default function Home() {
     change?: number;
     isDate?: boolean;
   }) => (
-    <div className="bg-bangladesh-green rounded-xl p-6 flex items-center justify-between h-full w-full">
+    <div className="bg-[#0b2738] p-6 flex items-center justify-between h-full w-full">
       <div className="flex items-center gap-4">
         {icon && <div className="w-14 h-14 flex items-center justify-center">{icon}</div>}
-        <span className="text-antiflash-white text-[2.25rem] font-black">{label}</span>
+        <span className="text-white text-[2.25rem] font-black">{label}</span>
       </div>
       {!isDate && value && (
-        <div className="flex flex-col items-end text-antiflash-white">
+        <div className="flex flex-col items-end text-white">
           <span className="text-[2.25rem] font-black">${value}</span>
           <ChangeIndicator value={change ?? 0} />
         </div>
@@ -81,20 +84,16 @@ export default function Home() {
   );
 
   return (
-    <main className="min-h-screen bg-rich-black flex flex-col items-center justify-center p-4 font-inter">
+    <main className="min-h-screen bg-[#000f1c] flex flex-col items-center justify-center p-4 font-inter">
       <div
         ref={ref}
-        className="grid grid-cols-2 gap-4 bg-rich-black w-[1080px] h-[580px] p-6"
+        className="grid grid-cols-2 gap-4 bg-[#000f1c] w-[1080px] h-[580px] p-6"
       >
         {cryptos.map((c) => (
           <Card
             key={c.symbol}
             icon={
-              <img
-                src={c.logo}
-                alt={c.symbol}
-                className="w-full h-full object-contain"
-              />
+              <img src={c.logo} alt={c.symbol} className="w-full h-full object-contain" />
             }
             label={c.symbol}
             value={formatValue(c.price, c.symbol)}
@@ -102,14 +101,25 @@ export default function Home() {
           />
         ))}
         <Card
-          icon={<CalendarDays size={48} className="text-caribbean" />}
-          label={date}
+          icon={
+            <div className="flex items-center gap-2">
+              <CalendarDays size={48} className="text-[#17c2c7]" />
+              <div className="text-white text-[2.25rem] font-black leading-tight">
+                {date}
+                <div className="text-lg font-medium text-[#ffffffa0]">
+                  Tashkent • {time}
+                </div>
+              </div>
+            </div>
+          }
+          label=""
           isDate
         />
       </div>
+
       <button
         onClick={handleDownload}
-        className="mt-4 bg-antiflash-white text-rich-black px-6 py-2 rounded-xl font-bold hover:bg-[#dceee9] transition"
+        className="mt-4 bg-white text-black px-6 py-2 rounded-xl font-bold hover:bg-gray-200 transition"
       >
         Скачать изображение
       </button>
